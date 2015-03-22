@@ -1,0 +1,4 @@
+services:
+#    fr_hollen.example:
+#        class: FR\HollenBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]

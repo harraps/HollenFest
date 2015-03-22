@@ -1,170 +1,101 @@
-Symfony Standard Edition
+HollenFest
 ========================
 
-Welcome to the Symfony Standard Edition - a fully-functional Symfony2
-application that you can use as the skeleton for your new applications.
+Création d'un site de running order pour un hellfest (2013 - 2014 - 2015)
 
-This document contains information on how to download, install, and start
-using Symfony. For a more detailed explanation, see the [Installation][1]
-chapter of the Symfony Documentation.
-
-1) Installing the Standard Edition
+1) Plan du projet
 ----------------------------------
 
-When it comes to installing the Symfony Standard Edition, you have the
-following options.
+### Les repertoires
 
-### Use Composer (*recommended*)
+Symfony fonctionne avec plusieurs répertoires
 
-As Symfony uses [Composer][2] to manage its dependencies, the recommended way
-to create a new project is to use it.
+ * app
+    fichiers de configuration
+ * bin
+    /!\ ne pas toucher
+ * src
+    fichiers sources (ce qu'on doit modifier)
+ * vendor
+    les bundles tiers, /!\ ne pas toucher
+ * web
+    les fichiers js, css, etc global au site
 
-If you don't have Composer yet, download it following the instructions on
-http://getcomposer.org/ or just run the following command:
+### Les commandes
 
-    curl -s http://getcomposer.org/installer | php
+Pour utiliser les commandes, il faut ouvrir un terminal à la racine du projet
+À chaque synchronisation du projet, il faut mettre à jour les bundles tiers
 
-Then, use the `create-project` command to generate a new Symfony application:
+ * pour mettre à jour les bundles tiers
+    php composer.phar update
+ * pour créer un bundle
+    php app/console generate:bundle
+ * pour créer la base de données
+    php app/console doctrine:database:create
+ * pour créer une entity
+    php app/console generate:doctrine:entity
+ * pour visioner les requètes produites pour mettre à jour la base de données
+    php app/console doctrine:schema:update --dump-sql
+ * pour créer le schéma de base de données
+    php app/console doctrine:schema:update --force
 
-    php composer.phar create-project symfony/framework-standard-edition path/to/install
-
-Composer will install Symfony and all its dependencies under the
-`path/to/install` directory.
-
-### Download an Archive File
-
-To quickly test Symfony, you can also download an [archive][3] of the Standard
-Edition and unpack it somewhere under your web server root directory.
-
-If you downloaded an archive "without vendors", you also need to install all
-the necessary dependencies. Download composer (see above) and run the
-following command:
-
-    php composer.phar install
-
-2) Checking your System Configuration
+2) Directive
 -------------------------------------
 
-Before starting coding, make sure that your local system is properly
-configured for Symfony.
+### Composition
+Le site devra comporter:
+- une page d'accueil
+- le planning général
+- une page d'inscription/connexion
+- proposer un moyen de reserver les places
 
-Execute the `check.php` script from the command line:
+Quand on est connecté, on doit pouvoir marquer les groupes qui nous intérêssent et l'application web doit se charger de nous créeer un running order optimal
+Il faut prévoir aussi des pauses pour manger (15 - 30 - 60 min)
+Le running order généré doit être exportable en PDF
 
-    php app/check.php
 
-The script returns a status code of `0` if all mandatory requirements are met,
-`1` otherwise.
+### Concept
+Vous devez réaliser le site présentant le Running Order du Hëllefest 2015.
+Le Hëllefest se tient sur 3 jours : vendredi, samedi et dimanche, de 10h à 3h du matin. 
+Un running order se compose d’un ordre de passage des groupes par scènes.
+Le Hëllefest se compose de 6 scènes qui jouent en alternance.
+Vous trouverez des exemples d’un festival francais dans le dossier du sujet Vous pouvez reprendre les mêmes noms de groupes ou pas.
+Un groupe a un nom, un style et joue une fois sur les 3 jours. Il joue à un horaire défini.
 
-Access the `config.php` script from a browser:
 
-    http://localhost/path-to-project/web/config.php
+### Fonctionnalités
+Vous devez présenter de manière lisible l’emploi du temps de chaque scène pour chaque jour.
+Vous pouvez vous inspirer des running order existants.
+Vous devez proposer une interface administrateur permettant d’ajouter ou de supprimer des groupes à un horaire donné sur une scene donnée.
+Cette interface devra être protegée (a vous de définir comment)
+Les visiteurs peuvent se créer un compte.
+Une fois connectés ils pourront faire des recherches pour trouver quel groupe joue à quelle heure, ou tous les groupes d’un style donné.
+Il pourra ensuite signaler qu’il veut aller voir ce groupe. Il ne peut pas choisir deux groupes qui jouent en même temps.
+L’utilisateur peut visualiser son running order personnalisé : celui qui présente que les groupes qu’il veut voir. 
+A vous de définir la manière de le visualiser  mais cela doit être facile à imprimer.
 
-If you get any warnings or recommendations, fix them before moving on.
+Exemple de fonctionnalités attendues : 
+- L’utilisateur veut voir tous les groupes de black metal du vendredi
+- L’utilisateur peut voir le running order du vendredi, du samedi ou du dimanche. Il peut aussi visualiser les 3 d’un coup
+- Par défaut, il voit toutes les scènes mais peut choisir de n’en voir qu’une.
+- Il peut définir qu’il ne veut voir les groupes que sur une certaine plage horaire.
+- L’administrateur peut visualiser le running order.
+- Il peut ajouter un groupe si il y’a une place (attention, il faut laisser au minimum 20 minutes entre deux groupes pour changer le matos sur une même scène !!! )
+- Il peut supprimer un groupe.
 
-3) Browsing the Demo Application
---------------------------------
+### Contraintes techniques
+Vous devrez utiliser une base de données. 
+Les communications entre votre application et la base de donnée devront passer par un ORM, Hibernate si vous êtes en Java.
+Votre site devra respecter les bonnes pratiques en terme d’IHM, et être intuitif pour l’utilisateur. 
+Vous devrez respecter le pattern MVC, et utiliser des webservices REST pour les dialogues entre votre vue et votre controller.
+Si vous codez en Java, les JSP ou les JSF sont recommandées. 
+Votre projet devra être un projet Maven si vous utilisez du java.
+Un rapport Sonar est attendu dans votre rapport.
+Vous pouvez vous baser sur des projets open-source, mais vous devrez les citer.
 
-Congratulations! You're now ready to use Symfony.
 
-From the `config.php` page, click the "Bypass configuration and go to the
-Welcome page" link to load up your first Symfony page.
-
-You can also use a web-based configurator by clicking on the "Configure your
-Symfony Application online" link of the `config.php` page.
-
-To see a real-live Symfony page in action, access the following page:
-
-    web/app_dev.php/demo/hello/Fabien
-
-4) Getting started with Symfony
--------------------------------
-
-This distribution is meant to be the starting point for your Symfony
-applications, but it also contains some sample code that you can learn from
-and play with.
-
-A great way to start learning Symfony is via the [Quick Tour][4], which will
-take you through all the basic features of Symfony2.
-
-Once you're feeling good, you can move onto reading the official
-[Symfony2 book][5].
-
-A default bundle, `AcmeDemoBundle`, shows you Symfony2 in action. After
-playing with it, you can remove it by following these steps:
-
-  * delete the `src/Acme` directory;
-
-  * remove the routing entry referencing AcmeDemoBundle in `app/config/routing_dev.yml`;
-
-  * remove the AcmeDemoBundle from the registered bundles in `app/AppKernel.php`;
-
-  * remove the `web/bundles/acmedemo` directory;
-
-  * empty the `security.yml` file or tweak the security configuration to fit
-    your needs.
-
-What's inside?
----------------
-
-The Symfony Standard Edition is configured with the following defaults:
-
-  * Twig is the only configured template engine;
-
-  * Doctrine ORM/DBAL is configured;
-
-  * Swiftmailer is configured;
-
-  * Annotations for everything are enabled.
-
-It comes pre-configured with the following bundles:
-
-  * **FrameworkBundle** - The core Symfony framework bundle
-
-  * [**SensioFrameworkExtraBundle**][6] - Adds several enhancements, including
-    template and routing annotation capability
-
-  * [**DoctrineBundle**][7] - Adds support for the Doctrine ORM
-
-  * [**TwigBundle**][8] - Adds support for the Twig templating engine
-
-  * [**SecurityBundle**][9] - Adds security by integrating Symfony's security
-    component
-
-  * [**SwiftmailerBundle**][10] - Adds support for Swiftmailer, a library for
-    sending emails
-
-  * [**MonologBundle**][11] - Adds support for Monolog, a logging library
-
-  * [**AsseticBundle**][12] - Adds support for Assetic, an asset processing
-    library
-
-  * **WebProfilerBundle** (in dev/test env) - Adds profiling functionality and
-    the web debug toolbar
-
-  * **SensioDistributionBundle** (in dev/test env) - Adds functionality for
-    configuring and working with Symfony distributions
-
-  * [**SensioGeneratorBundle**][13] (in dev/test env) - Adds code generation
-    capabilities
-
-  * **AcmeDemoBundle** (in dev/test env) - A demo bundle with some example
-    code
-
-All libraries and bundles included in the Symfony Standard Edition are
-released under the MIT or BSD license.
-
-Enjoy!
-
-[1]:  http://symfony.com/doc/2.6/book/installation.html
-[2]:  http://getcomposer.org/
-[3]:  http://symfony.com/download
-[4]:  http://symfony.com/doc/2.6/quick_tour/the_big_picture.html
-[5]:  http://symfony.com/doc/2.6/index.html
-[6]:  http://symfony.com/doc/2.6/bundles/SensioFrameworkExtraBundle/index.html
-[7]:  http://symfony.com/doc/2.6/book/doctrine.html
-[8]:  http://symfony.com/doc/2.6/book/templating.html
-[9]:  http://symfony.com/doc/2.6/book/security.html
-[10]: http://symfony.com/doc/2.6/cookbook/email.html
-[11]: http://symfony.com/doc/2.6/cookbook/logging/monolog.html
-[12]: http://symfony.com/doc/2.6/cookbook/assetic/asset_management.html
-[13]: http://symfony.com/doc/2.6/bundles/SensioGeneratorBundle/index.html
+### Fonctionnalités facultatives : 
+L’utilisateur peut définir le temps de chevauchement de deux groupes. 
+Vous pouvez définir une réelle identité visuelle pour votre site (CSS, bannière, etc) et proposer un design qui s’adapte suivant la taille de l’écran ou le média. Bref un Responsive Design.
+Proposez des options pour sécuriser votre interface d’administration.
+Lorsqu’un admin modifie un groupe ou un horaire de passage, les utilisateurs l’ayant selectionné sont prevenus (mail, sms, autre … ) 

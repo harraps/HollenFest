@@ -1,0 +1,3 @@
+fr_hollen_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: FRHollenBundle:Default:index }
