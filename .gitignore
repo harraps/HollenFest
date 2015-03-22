@@ -21,7 +21,7 @@
 /app/phpunit.xml
 
 # Composer PHAR
-/composer.phar
+# /composer.phar
 
 # =========================
 # Operating System Files
