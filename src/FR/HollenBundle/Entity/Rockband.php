@@ -3,11 +3,15 @@
 namespace FR\HollenBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\VirtualProperty;
 
 /**
  * Rockband
  *
- * @ORM\Table()
+ * @ORM\Table(name="fr_rockband")
  * @ORM\Entity
  */
 class Rockband
@@ -18,20 +22,24 @@ class Rockband
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Expose
      */
     private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255, unique=true)
+     * @Expose
      */
     private $name;
 
     /**
      * @var array
      *
-     * @ORM\Column(name="genres", type="array")
+     * @ORM\ManyToMany(targetEntity="Genre", inversedBy="rockbands", cascade={"persist"})
+     * @ORM\JoinTable(name="fr_genres_rockbands")
+     * @Expose
      */
     private $genres;
 

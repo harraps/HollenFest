@@ -3,11 +3,15 @@
 namespace FR\HollenBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\VirtualProperty;
 
 /**
  * RunningOrder
  *
- * @ORM\Table()
+ * @ORM\Table(name="fr_runningorder")
  * @ORM\Entity
  */
 class RunningOrder
@@ -18,13 +22,15 @@ class RunningOrder
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Expose
      */
     private $id;
 
     /**
      * @var array
      *
-     * @ORM\Column(name="concerts", type="array")
+     * @ORM\OneToMany(targetEntity="Concert", mappedBy="runningorder", cascade={"persist"})
+     * @Expose
      */
     private $concerts;
 
