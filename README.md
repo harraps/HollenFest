@@ -6,6 +6,11 @@ Création d'un site de running order pour un hellfest (2013 - 2014 - 2015)
 1) Plan du projet
 ----------------------------------
 
+### Dans le navigateur
+
+Pour voir la page principale, il faut taper l'adresse suivante
+    localhost/HollenFest/web/app_dev.php/
+
 ### Les repertoires
 
 Symfony fonctionne avec plusieurs répertoires
