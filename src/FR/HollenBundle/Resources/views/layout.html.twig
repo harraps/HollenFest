@@ -10,6 +10,7 @@
         {% stylesheets 
             'css/*.min.css'
             '@FRHollenBundle/Resources/public/css/*.min.css'
+            output='css/screen.css'
         %}
             <link href="{{ asset_url }}" rel="stylesheet" type="text/css" />
         {% endstylesheets %}
@@ -19,6 +20,7 @@
             'js/bootstrap.min.js'
             'snap.svg.min.js'
             '@FRHollenBundle/Resources/public/js/*.min.js'
+            output='js/main.js'
         %}
             <script src="{{ asset_url }}" type="text/javascript"></script>
         {% endjavascripts %}
