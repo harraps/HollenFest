@@ -79,8 +79,10 @@ hollen.checkOverlap = function( element ){
         var beg = box.y;
         var end = box.y+box.h;
         if(
-            ( beg < el_beg && end > el_beg ) ||
-            ( beg < el_end && end > el_end )
+            !(
+                ( beg > el_beg && end > el_beg ) ||
+                ( beg < el_end && end < el_end )
+            )
         ){
             hollen.orders[i].remove();
             hollen.orders[i].splice( i, 1 );

@@ -16,6 +16,10 @@ use JMS\Serializer\Annotation\VirtualProperty;
  */
 class Concert
 {
+    
+    // minimal amount of minutes between begin and end of the concert
+    const MINTIME = 20;
+    
     /**
      * @var integer
      *
@@ -50,7 +54,6 @@ class Concert
      */
     protected $endTime;
 
-
     /**
      * Get id
      *
@@ -67,7 +70,7 @@ class Concert
      * @param \stdClass $rockband
      * @return Concert
      */
-    public function setRockband($rockband)
+    public function setRockband(RockBand $rockband)
     {
         $this->rockband = $rockband;
         return $this;
@@ -84,12 +87,31 @@ class Concert
     }
 
     /**
+     * Set both begin and end times and make sure that there is atleast 20min between them
+     * 
+     * @return Concert
+     */
+    public function setTimes(DateTime $beginTime, DateTime $endTime )
+    {
+        $diff = $beginTime->diff( $endTime )->getTimestamp();
+        
+        // if the interval is not negative
+        if( !$diff->invert ){
+            if( $this->MINTIME <= ( $diff->i + 60*( $diff->h + 24*$diff->d ) ) ){
+                $this->beginTime = $beginTime;
+                $this->endTime = $endTime;
+            }
+        }
+        return $this;
+    }
+    
+    /**
      * Set beginTime
      *
      * @param \DateTime $beginTime
      * @return Concert
      */
-    public function setBeginTime($beginTime)
+    public function setBegintime(DateTime $beginTime)
     {
         $this->beginTime = $beginTime;
         return $this;
@@ -100,18 +122,36 @@ class Concert
      *
      * @return \DateTime 
      */
-    public function getBeginTime()
+    public function getBegintime()
     {
         return $this->beginTime;
     }
 
+    /**
+     * return the begin time as an int with 1 = 1min
+     * @return int
+     */
+    public function beginint()
+    {
+        return $this->beginTime->getTimestamp()/60;
+    }
+    
+    /**
+     * return the begin time as an int with a margin of 20 min
+     * @return int
+     */
+    public function beginintmargin()
+    {
+        return $this->beginTime->getTimestamp()/60 - $this->MINTIME;
+    }
+    
     /**
      * Set endTime
      *
      * @param \DateTime $endTime
      * @return Concert
      */
-    public function setEndTime($endTime)
+    public function setEndtime(DateTime $endTime)
     {
         $this->endTime = $endTime;
         return $this;
@@ -122,8 +162,47 @@ class Concert
      *
      * @return \DateTime 
      */
-    public function getEndTime()
+    public function getEndtime()
     {
         return $this->endTime;
     }
+    
+    /**
+     * return the end time as an int with 1 = 1min
+     * @return int
+     */
+    public function endint()
+    {
+        return $this->endTime->getTimestamp()/60;
+    }
+    
+    /**
+     * return the end time as an int with a margin of 20 min
+     * @return int
+     */
+    public function endintmargin()
+    {
+        return $this->endTime->getTimestamp()/60 + $this->MINTIME;
+    }
+    
+    /**
+     * return true if the concert doesn't use the same space
+     * @param Concert $concert
+     */
+    public function checkSpace(Concert $concert)
+    {
+        if(
+            (
+                $this->beginint() > $concert->beginintmargin() &&
+                $this->endint()   > $concert->beginintmargin()
+            )||(
+                $this->beginint() < $concert->endintmargin() &&
+                $this->endint()   < $concert->endintmargin()
+            )
+        ){
+            return true;
+        }
+        return false;
+    }
+    
 }
