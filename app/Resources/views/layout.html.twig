@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>HollenFest</title>
+        <meta name="author" content="Olivier Schyns" />
+        <meta name="author" content="Rudi Grabensee" />
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        {% stylesheets 
+            'css/[0-9][0-9]_*.css'
+            '@FRHollenBundle/Resources/public/css/*.css'
+            filter='yui_css'
+            output='css/compiled/main.css'
+        %}
+        <link href="{{ asset_url }}" rel="stylesheet" type="text/css" />
+        {% endstylesheets %}
+
+        {# javascripts
+            'js/[0-9][0-9]_*.js'
+            '@FRHollenBundle/Resources/public/js/*.js'
+            filter='yui_js'
+            output='js/compiled/main.js'
+        #}
+        {% javascripts
+            'js/[0-9][0-9]_*.js'
+            '@FRHollenBundle/Resources/public/js/*.js'
+        %}
+        <script src="{{ asset_url }}" type="text/javascript"></script>
+        {% endjavascripts %}
+
+    </head>
+    <body>
+        {% block body %}{% endblock %}
+    </body>
+</html>
