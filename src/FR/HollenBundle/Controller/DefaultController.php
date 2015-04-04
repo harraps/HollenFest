@@ -13,7 +13,16 @@ class DefaultController extends Controller
     
     public function planningAction()
     {
-        return $this->render('FRHollenBundle:Default:planning.html.twig');
+        $repository = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('FRHollenBundle:Concert');
+        
+        $planning = $repository->findAll();
+        
+        return $this->render('FRHollenBundle:Default:planning.html.twig', array(
+            'planning' => $planning
+        ));
     }
     
     

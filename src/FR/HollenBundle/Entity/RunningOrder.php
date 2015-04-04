@@ -24,15 +24,15 @@ class RunningOrder
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Expose
      */
-    private $id;
+    protected $id;
 
     /**
      * @var array
      *
-     * @ORM\OneToMany(targetEntity="Concert", mappedBy="runningorder", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Concert", mappedBy="concerts", cascade={"persist"})
      * @Expose
      */
-    private $concerts;
+    protected $concerts;
 
 
     /**
@@ -54,7 +54,6 @@ class RunningOrder
     public function setConcerts($concerts)
     {
         $this->concerts = $concerts;
-
         return $this;
     }
 

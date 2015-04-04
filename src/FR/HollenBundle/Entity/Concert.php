@@ -24,15 +24,7 @@ class Concert
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Expose
      */
-    private $id;
-
-    /**
-     * @var Stage
-     *
-     * @ORM\OneToOne(targetEntity="Stage", cascade={"persist"})
-     * @Expose
-     */
-    private $stage;
+    protected $id;
 
     /**
      * @var Rockband
@@ -40,7 +32,7 @@ class Concert
      * @ORM\OneToOne(targetEntity="Rockband", cascade={"persist"})
      * @Expose
      */
-    private $rockband;
+    protected $rockband;
 
     /**
      * @var \DateTime
@@ -48,7 +40,7 @@ class Concert
      * @ORM\Column(name="beginTime", type="datetime")
      * @Expose
      */
-    private $beginTime;
+    protected $beginTime;
 
     /**
      * @var \DateTime
@@ -56,7 +48,7 @@ class Concert
      * @ORM\Column(name="endTime", type="datetime")
      * @Expose
      */
-    private $endTime;
+    protected $endTime;
 
 
     /**
@@ -70,29 +62,6 @@ class Concert
     }
 
     /**
-     * Set stage
-     *
-     * @param \stdClass $stage
-     * @return Concert
-     */
-    public function setStage($stage)
-    {
-        $this->stage = $stage;
-
-        return $this;
-    }
-
-    /**
-     * Get stage
-     *
-     * @return \stdClass 
-     */
-    public function getStage()
-    {
-        return $this->stage;
-    }
-
-    /**
      * Set rockband
      *
      * @param \stdClass $rockband
@@ -101,7 +70,6 @@ class Concert
     public function setRockband($rockband)
     {
         $this->rockband = $rockband;
-
         return $this;
     }
 
@@ -124,7 +92,6 @@ class Concert
     public function setBeginTime($beginTime)
     {
         $this->beginTime = $beginTime;
-
         return $this;
     }
 
@@ -147,7 +114,6 @@ class Concert
     public function setEndTime($endTime)
     {
         $this->endTime = $endTime;
-
         return $this;
     }
 

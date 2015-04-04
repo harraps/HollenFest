@@ -24,7 +24,7 @@ class Stage
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Expose
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
@@ -32,9 +32,16 @@ class Stage
      * @ORM\Column(name="name", type="string", length=255, unique=true)
      * @Expose
      */
-    private $name;
+    protected $name;
 
-
+    /**
+     * @var array
+     * 
+     * @ORM\OneToMany(targetEntity="Stage", mappedBy="concerts", cascade={"persist"})
+     * @Expose
+     */
+    protected $concerts;
+    
     /**
      * Get id
      *
@@ -54,7 +61,6 @@ class Stage
     public function setName($name)
     {
         $this->name = $name;
-
         return $this;
     }
 

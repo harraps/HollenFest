@@ -24,7 +24,7 @@ class Genre
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Expose
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
@@ -32,16 +32,7 @@ class Genre
      * @ORM\Column(name="name", type="string", length=255)
      * @Expose
      */
-    private $name;
-
-    /**
-     * @var array
-     *
-     * @ORM\ManyToMany(targetEntity="Rockband", mappedBy="genres", cascade={"persist", "merge"})
-     * @Expose
-     */
-    private $rockbands;
-
+    protected $name;
 
     /**
      * Get id
@@ -62,7 +53,6 @@ class Genre
     public function setName($name)
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -74,28 +64,5 @@ class Genre
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Set rockbands
-     *
-     * @param array $rockbands
-     * @return Genre
-     */
-    public function setRockbands($rockbands)
-    {
-        $this->rockbands = $rockbands;
-
-        return $this;
-    }
-
-    /**
-     * Get rockbands
-     *
-     * @return array 
-     */
-    public function getRockbands()
-    {
-        return $this->rockbands;
     }
 }

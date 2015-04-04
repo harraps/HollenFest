@@ -24,7 +24,7 @@ class Rockband
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Expose
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
@@ -32,7 +32,7 @@ class Rockband
      * @ORM\Column(name="name", type="string", length=255, unique=true)
      * @Expose
      */
-    private $name;
+    protected $name;
 
     /**
      * @var array
@@ -41,7 +41,7 @@ class Rockband
      * @ORM\JoinTable(name="fr_genres_rockbands")
      * @Expose
      */
-    private $genres;
+    protected $genres;
 
 
     /**
@@ -63,7 +63,6 @@ class Rockband
     public function setName($name)
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -86,7 +85,6 @@ class Rockband
     public function setGenres($genres)
     {
         $this->genres = $genres;
-
         return $this;
     }
 

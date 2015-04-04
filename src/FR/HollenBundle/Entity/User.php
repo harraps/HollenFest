@@ -32,7 +32,7 @@ class User extends BaseUser
      * @ORM\OneToOne(targetEntity="RunningOrder", cascade={"remove", "persist"})
      * @Expose
      */
-    private $runningOrder;
+    protected $runningOrder;
 
 
     /**
@@ -54,7 +54,6 @@ class User extends BaseUser
     public function setRunningOrder($runningOrder)
     {
         $this->runningOrder = $runningOrder;
-
         return $this;
     }
 
