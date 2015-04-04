@@ -10,4 +10,11 @@ class DefaultController extends Controller
     {
         return $this->render('FRHollenBundle:Default:index.html.twig');
     }
+    
+    public function planningAction()
+    {
+        return $this->render('FRHollenBundle:Default:planning.html.twig');
+    }
+    
+    
 }

@@ -23,6 +23,10 @@
 # Composer PHAR
 # /composer.phar
 
+# NodeJS and Bower
+bower_components/
+node_modules/
+
 # =========================
 # Operating System Files
 # =========================
