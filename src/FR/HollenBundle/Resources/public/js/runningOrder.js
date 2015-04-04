@@ -3,62 +3,116 @@
 
 var hollen = {};
 
-hollen.tag;
 hollen.stages = {};
-hollen.shows = {};
-hollen.order = {};
+hollen.concerts = {};
+hollen.runningOrder;
+hollen.orders = {};
 
 /**
  * Init the running order
  * @param {string} tag  the id of the div where the running order will be generated
  * @param {map}    data the map of data of the running order
  */
-hollen.init = function( tag, beginDate, data ){
+hollen.init = function( nbStages ){
     
-    var s = Snap(tag);
-    s.attr({ viewBox: "0 0 1000 10000" });
+    hollen.runningOrder = Snap("#runningOrder");
+    hollen.addLines( hollen.runningOrder );
     
-    var width = 1000 / Object.keys(data).length;
-    var stageCount = 0;
-    
-    // for each stage from our data map
-    for( var i in data ){
+    for( var i=0; i<nbStages; ++i ){
         
-        // we set the horizontal position of or elements
-        var x = width * stageCount;
+        hollen.stages[i] = Snap("#"+i);
+        hollen.addLines( hollen.stages[i] );
         
-        var scene_name = s.text( x+10, 20, i );
-        scene_name.attr({
-            fill: "#ddd",
-            "font-size": "20px"
-        });
+        hollen.concerts[i] = hollen.stages[i].selectAll("g");
         
-        // for each show on our stage
-        for( var j in data[i] ){
+        for( var j=0; j<hollen.concerts[i].length; ++j ){
             
-            // we set the vertical position based on the begin and end times
-            var y = data[i][j][0] + 40;
-            var height = data[i][j][1] - data[i][j][0];
+            hollen.concerts[i][j].hover(
+                function(){
+                    // if element is hovered
+                    this.attr({ stroke: "#fff" });
+                },function(){
+                    // if element isn't hovered
+                    this.attr({ stroke: "#000" });
+                }
+            );
+            hollen.concerts[i][j].click(
+                function(){
+                    // when object is clicked
+                    var copy = this.clone();
+                    copy.append(hollen.runningOrder);
+                    hollen.checkOverlap( copy );
+                    // we want to be able to remove an item from the runningOrder without replacing it with an other
+                    copy.hover(
+                        function(){
+                            // if element is hovered
+                            this.attr({ stroke: "#f00" });
+                        },function(){
+                            // if element isn't hovered
+                            this.attr({ stroke: "#000" });
+                        }
+                    );
+                    copy.click(
+                        function(){
+                            hollen.removeFromRunningOrder(this);
+                        }
+                    );
+                    hollen.orders.push(copy);
+                }
+            );
             
-            var show = s.rect( x, y, width-10, height, 5, 5 );
-            show.attr({
-                fill: "#131e5d",
-            });
-            
-            var group_name = s.text( x+10, y+30, j );
-            group_name.attr({
-                fill: "#ddd",
-                "font-size": "20px"
-            });
-            var group_time = s.text( x+10, y+60, [ data[i][j][0], " - ", data[i][j][1] ] );
-            group_time.attr({
-                fill: "#4485dd",
-                "font-size": "15px"
-            });
         }
-        
-        ++stageCount;
     }
+};
+
+// remove all other elements overlaping with this element from the runningOrder
+hollen.checkOverlap = function( element ){
+    var el_box = element.getBBox();
+    var el_beg = el_box.y;
+    var el_end = el_box.y+el_box.h;
     
+    // we iterate in reverse to remove items from the array
+    var i = hollen.orders.length;
+    while( --i ){
+        
+        var box = hollen.orders[i].getBBox();
+        var beg = box.y;
+        var end = box.y+box.h;
+        if(
+            ( beg < el_beg && end > el_beg ) ||
+            ( beg < el_end && end > el_end )
+        ){
+            hollen.orders[i].remove();
+            hollen.orders[i].splice( i, 1 );
+        }
+    }
+};
+
+hollen.removeFromRunningOrder = function( element ){
+    // we want to remove an element so we iterate in reverse
+    var i = hollen.orders.length;
+    while( --i ){
+        
+        if( element == hollen.orders[i] ){
+            hollen.orders[i].remove();
+            hollen.orders[i].splice( i, 1 );
+        }
+    }
+};
+
+hollen.addLines = function( stage ){
+    // we want to have lines to symbolize hours
+    // in our planning, 1px = 1min so 60px = 1hour
+    var bbox = stage.getBBox();
     
+    // for weird reason we have to mutiply by ten to have the right result
+    var stage_height = bbox.height * 10;
+    
+    for( var i=60; i<stage_height; i+=60 ){
+        var line = stage.line( 0, i, 100, i );
+        line.attr({
+            stroke: "#000",
+            strokeWidth: 1
+        });
+    }
 };

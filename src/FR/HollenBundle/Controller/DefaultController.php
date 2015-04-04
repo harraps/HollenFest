@@ -16,12 +16,12 @@ class DefaultController extends Controller
         $repository = $this
             ->getDoctrine()
             ->getManager()
-            ->getRepository('FRHollenBundle:Concert');
+            ->getRepository('FRHollenBundle:Stage');
         
-        $planning = $repository->findAll();
+        $stages = $repository->findAll();
         
         return $this->render('FRHollenBundle:Default:planning.html.twig', array(
-            'planning' => $planning
+            'stages' => $stages
         ));
     }
     
