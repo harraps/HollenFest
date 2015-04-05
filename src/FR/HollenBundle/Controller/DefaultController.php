@@ -25,14 +25,4 @@ class DefaultController extends Controller
         ));
     }
     
-    public function signinAction()
-    {
-        
-    }
-    
-    public function loginAction()
-    {
-        
-    }
-    
 }

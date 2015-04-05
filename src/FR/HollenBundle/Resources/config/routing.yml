@@ -5,11 +5,3 @@ fr_hollen_homepage:
 fr_hollen_planning:
     path:     /planning
     defaults: { _controller: FRHollenBundle:Default:planning }
-
-fr_hollen_signin:
-    path:     /signin
-    defaults: { _controller: FRHollenBundle:Default:signin }
-
-fr_hollen_login:
-    path:     /login
-    defaults: { _controller: FRHollenBundle:Default:login }
