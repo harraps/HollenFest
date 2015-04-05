@@ -24,13 +24,13 @@
     </div>
     {% for stage in stages %}
     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
-        <svg id="{{ loop.index0 }}" height="100%" width="100%" viewBox="0 0 100 1000">
+        <svg id="{{ loop.index0 }}" height="100%" width="100%" viewBox="0 0 100 {{ end - begin }}">
             {% for concert in stage.concerts %}
             <g>
-                <rect x="5" y="{{ concert.beginint }}" width="90" height="{{ concert.endint - concert.beginint }}" ry="10" style="fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)" />
-                <text x="50" y="{{ concert.beginint + 20 }}" text-anchor="middle" style="font-size:10px;" fill="white">{{ concert.rockband.name }}</text>
-                <text x="50" y="{{ concert.beginint + 30 }}" text-anchor="middle" style="font-size:10px;" fill="gray">{{ concert.begintime }}</text>
-                <text x="50" y="{{ concert.beginint + 40 }}" text-anchor="middle" style="font-size:10px;" fill="gray">{{ concert.endtime }}</text>
+                <rect x="5" y="{{ concert.beginint - begin }}" width="90" height="{{ concert.endint - concert.beginint }}" ry="10" style="fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)" />
+                <text x="50" y="{{ concert.beginint - begin + 20 }}" text-anchor="middle" style="font-size:10px;" fill="white">{{ concert.rockband.name }}</text>
+                <text x="50" y="{{ concert.beginint - begin + 30 }}" text-anchor="middle" style="font-size:10px;" fill="gray">{{ concert.beginTime }}</text>
+                <text x="50" y="{{ concert.beginint - begin + 40 }}" text-anchor="middle" style="font-size:10px;" fill="gray">{{ concert.endTime }}</text>
             </g>
             {% endfor %}
         </svg>

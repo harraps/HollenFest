@@ -111,7 +111,7 @@ class Concert
      * @param \DateTime $beginTime
      * @return Concert
      */
-    public function setBegintime(DateTime $beginTime)
+    public function setBeginTime(DateTime $beginTime)
     {
         $this->beginTime = $beginTime;
         return $this;
@@ -122,7 +122,7 @@ class Concert
      *
      * @return \DateTime 
      */
-    public function getBegintime()
+    public function getBeginTime()
     {
         return $this->beginTime;
     }
@@ -133,7 +133,7 @@ class Concert
      */
     public function beginint()
     {
-        return $this->beginTime->getTimestamp()/60;
+        return (int)($this->beginTime->getTimestamp()/60);
     }
     
     /**
@@ -142,7 +142,7 @@ class Concert
      */
     public function beginintmargin()
     {
-        return $this->beginTime->getTimestamp()/60 - $this->MINTIME;
+        return (int)($this->beginTime->getTimestamp()/60) - $this->MINTIME;
     }
     
     /**
@@ -151,7 +151,7 @@ class Concert
      * @param \DateTime $endTime
      * @return Concert
      */
-    public function setEndtime(DateTime $endTime)
+    public function setEndTime(DateTime $endTime)
     {
         $this->endTime = $endTime;
         return $this;
@@ -162,7 +162,7 @@ class Concert
      *
      * @return \DateTime 
      */
-    public function getEndtime()
+    public function getEndTime()
     {
         return $this->endTime;
     }
@@ -173,7 +173,7 @@ class Concert
      */
     public function endint()
     {
-        return $this->endTime->getTimestamp()/60;
+        return (int)($this->endTime->getTimestamp()/60);
     }
     
     /**
@@ -182,7 +182,7 @@ class Concert
      */
     public function endintmargin()
     {
-        return $this->endTime->getTimestamp()/60 + $this->MINTIME;
+        return (int)($this->endTime->getTimestamp()/60) + $this->MINTIME;
     }
     
     /**

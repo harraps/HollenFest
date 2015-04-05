@@ -1,11 +1,11 @@
 # default routes
 fr_hollen_homepage:
-    path:     /home
+    path: /home
     defaults: { _controller: FRHollenBundle:Default:index }
 
 fr_hollen_planning:
-    path:     /planning{id}
-    defaults: { _controller: FRHollenBundle:Default:planning }
+    resource: "@FRHollenBundle/Resources/config/planning.yml"
+    prefix: /planning
 
 # Users
 fr_hollen_list_users:
@@ -15,14 +15,20 @@ fr_hollen_list_users:
 fr_hollen_grant_user:
     path: /user/grant/{id}
     defaults: { _controller: FRHollenBundle:Admin:grantUser }
+    requirements:
+        id: \d*
 
 fr_hollen_ungrant_user:
     path: /user/ungrant/{id}
     defaults: { _controller: FRHollenBundle:Admin:ungrantUser }
+    requirements:
+        id: \d*
 
 fr_hollen_remove_user:
     path: /user/remove/{id}
     defaults: { _controller: FRHollenBundle:Admin:removeUser }
+    requirements:
+        id: \d*
 
 # Rockbands
 fr_hollen_list_rockbands:
@@ -36,26 +42,34 @@ fr_hollen_add_rockband:
 fr_hollen_update_rockband:
     path: /rockband/update/{id}
     defaults: { _controller: FRHollenBundle:Admin:updateRockband }
+    requirements:
+        id: \d*
 
 fr_hollen_remove_rockband:
     path: /rockband/remove/{id}
     defaults: { _controller: FRHollenBundle:Admin:removeRockband }
+    requirements:
+        id: \d*
 
 # Concerts
 fr_hollen_list_concerts:
-    
-    
+    path: /concert/list
+    defaults: { _controller: FRHollenBundle:Admin:listConcerts }
 
 fr_hollen_add_concert:
-    
-    
+    path: /concert/add
+    defaults: { _controller: FRHollenBundle:Admin:addConcert }
 
 fr_hollen_update_concert:
-    
-    
+    path: /concert/update/{id}
+    defaults: { _controller: FRHollenBundle:Admin:updateConcert }
+    requirements:
+        id: \d*
 
 fr_hollen_remove_concert:
-    
-    
+    path: /concert/remove/{id}
+    defaults: { _controller: FRHollenBundle:Admin:removeConcert }
+    requirements:
+        id: \d*
 
 # 

@@ -11,11 +11,13 @@
             </div>
             <div class="navbar-collapse collapse navbar-responsive-collapse" aria-expanded="true">
                 <ul class="nav navbar-nav">
+                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                     <li>
-                        <a href="{{ path('fr_hollen_planning') }}">
+                        <a href="{{ path('fr_hollen_planning_default',{ 'id':app.user.id }) }}">
                             <span class="glyphicon glyphicon-th-list"></span> Planning
                         </a>
                     </li>
+                    {% endif %}
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {% if is_granted("ROLE_ADMIN") %}
