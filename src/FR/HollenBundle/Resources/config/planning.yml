@@ -1,8 +1,0 @@
-# Routes pour l'affichage du running order
-
-fr_hollen_planning_default:
-    path: /{stage}/{day}
-    defaults: { _controller: FRHollenBundle:Default:planning, stage: ALL, day: ALL }
-    requirements:
-        stage: [A-Za-z0-9\-]*
-        day: (\d{2})|(ALL)

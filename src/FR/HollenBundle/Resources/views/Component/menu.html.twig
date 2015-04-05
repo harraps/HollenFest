@@ -13,7 +13,7 @@
                 <ul class="nav navbar-nav">
                     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                     <li>
-                        <a href="{{ path('fr_hollen_planning_default',{ 'id':app.user.id }) }}">
+                        <a href="{{ path('fr_hollen_planning',{ 'id':app.user.id }) }}">
                             <span class="glyphicon glyphicon-th-list"></span> Planning
                         </a>
                     </li>

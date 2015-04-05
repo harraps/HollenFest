@@ -4,8 +4,11 @@ fr_hollen_homepage:
     defaults: { _controller: FRHollenBundle:Default:index }
 
 fr_hollen_planning:
-    resource: "@FRHollenBundle/Resources/config/planning.yml"
-    prefix: /planning
+    path: /planning/{stage}/{day}
+    defaults: { _controller: FRHollenBundle:Default:planning, stage: ALL, day: ALL }
+    requirements:
+        stage: ([A-Za-z0-9\-])*
+        day: (\d{2})|(ALL)
 
 # Users
 fr_hollen_list_users:

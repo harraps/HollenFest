@@ -36,6 +36,11 @@ class AdminController extends Controller
         return $this->listUsersAction();
     }
     
+    public function ungrantUserAction($id)
+    {
+        
+    }
+    
     public function removeUserAction($id)
     {
         $userMan = $this->get('fos_user.user_manager');
@@ -65,6 +70,11 @@ class AdminController extends Controller
         
     }
     
+    public function updateRockbandAction($id)
+    {
+
+    }
+    
     public function removeRockbandAction($id)
     {
         
@@ -79,6 +89,11 @@ class AdminController extends Controller
     public function addConcertAction($data)
     {
         
+    }
+    
+    public function updateConcertAction($id)
+    {
+
     }
     
     public function removeConcertAction($id)
