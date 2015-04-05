@@ -1,0 +1,58 @@
+{% extends "FRHollenBundle::layout.html.twig" %}
+
+{% block content %}
+<div class="page-header">
+    <h1>List des utilisateurs du site</h1>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Last Login</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.lastLogin.format("H:i d/m/Y") }}</td>
+                    <td>
+                        {# A super admin shouldn't be able to delete himself #}
+                        {% if not user.hasRole("ROLE_SUPER_ADMIN") %}
+                        <div class="btn-group btn-group-xs pull-right">
+                            {% if user.hasRole("ROLE_ADMIN") %}
+                            <a href="{{ path('fr_hollen_ungrant_user',{ 'id':user.id }) }}" class="btn btn-warning">
+                                <span class="glyphicon glyphicon-arrow-down"></span>
+                                <span class="hidden-xs">Ungrant</span>
+                            </a>
+                            {% else %}
+                            <a href="{{ path('fr_hollen_grant_user',{ 'id':user.id }) }}" class="btn btn-success">
+                                <span class="glyphicon glyphicon-arrow-up"></span>
+                                <span class="hidden-xs">Grant</span>
+                            </a>
+                            {% endif %}
+                            <a href="{{ path('fr_hollen_remove_user',{ 'id':user.id }) }}" class="btn btn-danger">
+                                <span class="glyphicon glyphicon-remove"></span>
+                                <span class="hidden-xs">Supprimer</span>
+                            </a>
+                        </div>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+    </div>
+</div>
+
+{% endblock %}

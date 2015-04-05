@@ -11,8 +11,12 @@ class DefaultController extends Controller
         return $this->render('FRHollenBundle:Default:index.html.twig');
     }
     
-    public function planningAction()
+    public function planningAction($id)
     {
+        $userMan = $this->get('fos_user.user_manager');
+        $user = $userMan->findUserBy(array( 'id' => $id ));
+        $runningOrder = $user->getRunningOrder();
+        
         $repository = $this
             ->getDoctrine()
             ->getManager()
@@ -21,6 +25,7 @@ class DefaultController extends Controller
         $stages = $repository->findAll();
         
         return $this->render('FRHollenBundle:Default:planning.html.twig', array(
+            'runningOrder' => $runningOrder,
             'stages' => $stages
         ));
     }

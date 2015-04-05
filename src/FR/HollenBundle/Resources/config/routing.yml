@@ -1,7 +1,61 @@
+# default routes
 fr_hollen_homepage:
     path:     /home
     defaults: { _controller: FRHollenBundle:Default:index }
 
 fr_hollen_planning:
-    path:     /planning
+    path:     /planning{id}
     defaults: { _controller: FRHollenBundle:Default:planning }
+
+# Users
+fr_hollen_list_users:
+    path: /user/list
+    defaults: { _controller: FRHollenBundle:Admin:listUsers }
+
+fr_hollen_grant_user:
+    path: /user/grant/{id}
+    defaults: { _controller: FRHollenBundle:Admin:grantUser }
+
+fr_hollen_ungrant_user:
+    path: /user/ungrant/{id}
+    defaults: { _controller: FRHollenBundle:Admin:ungrantUser }
+
+fr_hollen_remove_user:
+    path: /user/remove/{id}
+    defaults: { _controller: FRHollenBundle:Admin:removeUser }
+
+# Rockbands
+fr_hollen_list_rockbands:
+    path: /rockband/list
+    defaults: { _controller: FRHollenBundle:Admin:listRockbands }
+
+fr_hollen_add_rockband:
+    path: /rockband/add
+    defaults: { _controller: FRHollenBundle:Admin:addRockband }
+
+fr_hollen_update_rockband:
+    path: /rockband/update/{id}
+    defaults: { _controller: FRHollenBundle:Admin:updateRockband }
+
+fr_hollen_remove_rockband:
+    path: /rockband/remove/{id}
+    defaults: { _controller: FRHollenBundle:Admin:removeRockband }
+
+# Concerts
+fr_hollen_list_concerts:
+    
+    
+
+fr_hollen_add_concert:
+    
+    
+
+fr_hollen_update_concert:
+    
+    
+
+fr_hollen_remove_concert:
+    
+    
+
+# 

@@ -1,5 +1,13 @@
 {% block fos_user_content %}
 
+{% for key, messages in app.session.flashbag.all() %}
+    {% for message in messages %}
+    <div class="alert alert-{{ key }}">
+        {{ message|trans({}, 'FOSUserBundle') }}
+    </div>
+    {% endfor %}
+{% endfor %}
+
 <div class="row">
     <div class="col-lg-offset-3 col-lg-6  col-md-offset-2 col-md-8 col-sm-offset-1 col-sm-10">
         <form id="fos_user_registration_form" class="form-horizontal well" action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST">
