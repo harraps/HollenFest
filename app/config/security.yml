@@ -3,7 +3,7 @@
 security:
     # http://symfony.com/doc/current/book/security.html#encoding-the-user-s-password
     encoders:
-        FOS\UserBundle\Model\UserInterface: sha512
+        FR\HollenBundle\Entity\User: sha512
 
     # http://symfony.com/doc/current/book/security.html#hierarchical-roles
     role_hierarchy:
@@ -12,7 +12,7 @@ security:
 
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
-        fos_userbundle:
+        main:
             id: fos_user.user_provider.username
         in_memory:
             memory:
@@ -24,12 +24,17 @@ security:
     # for specific sections of your app
     firewalls:
         main:
-            pattern: ^/
+            pattern:   ^/
+            anonymous: true
+            provider:  main
             form_login:
-                provider: fos_userbundle
-                csrf_provider: form.csrf_provider
-            logout:       true
-            anonymous:    true
+                login_path: fos_user_security_login
+                check_path: fos_user_security_check
+            logout:
+                path: fos_user_security_logout
+                target: /
+            remember_me:
+                key: %secret%
         # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
