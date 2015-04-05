@@ -41,7 +41,7 @@ class DefaultController extends Controller
             
             $day = (int) $day;
             foreach( $stages as &$s ){
-                $concerts = []
+                $concerts = [];
                 foreach( $s->getConcerts() as &$concert ){
                     // beginint return the date in minutes so we divide it by (60*24) to get the days
                     if( $concert->getBeginTime()->format("d") == $day ){
