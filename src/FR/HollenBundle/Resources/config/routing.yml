@@ -45,12 +45,8 @@ fr_hollen_list_genres:
     defaults: { _controller: FRHollenBundle:Admin:listGenres }
 
 fr_hollen_add_genre:
-    path: /genre/add
-    defaults: { _controller: FRHollenBundle:Admin:addGenre }
-
-fr_hollen_update_genre:
-    path: /genre/update/{id}
-    defaults: { _controller: FRHollenBundle:Admin:updateGenre }
+    path: /genre/add/{id}
+    defaults: { _controller: FRHollenBundle:Admin:addGenre, id: null }
     requirements:
         id: \d+
 
@@ -66,12 +62,8 @@ fr_hollen_list_rockbands:
     defaults: { _controller: FRHollenBundle:Admin:listRockbands }
 
 fr_hollen_add_rockband:
-    path: /rockband/add
-    defaults: { _controller: FRHollenBundle:Admin:addRockband }
-
-fr_hollen_update_rockband:
-    path: /rockband/update/{id}
-    defaults: { _controller: FRHollenBundle:Admin:updateRockband }
+    path: /rockband/add/{id}
+    defaults: { _controller: FRHollenBundle:Admin:addRockband, id: null }
     requirements:
         id: \d+
 
@@ -81,18 +73,31 @@ fr_hollen_remove_rockband:
     requirements:
         id: \d+
 
+# Stages
+fr_hollen_list_stages:
+    path: /stage/list
+    defaults: { _controller: FRHollenBundle:Admin:listStages }
+
+fr_hollen_add_stage:
+    path: /stage/add/{id}
+    defaults: { _controller: FRHollenBundle:Admin:addStage, id: null }
+    requirements:
+        id: \d+
+
+fr_hollen_remove_stage:
+    path: /stage/remove/{id}
+    defaults: { _controller: FRHollenBundle:Admin:removeStage }
+    requirements:
+        id: \d+
+
 # Concerts
 fr_hollen_list_concerts:
     path: /concert/list
     defaults: { _controller: FRHollenBundle:Admin:listConcerts }
 
 fr_hollen_add_concert:
-    path: /concert/add
-    defaults: { _controller: FRHollenBundle:Admin:addConcert }
-
-fr_hollen_update_concert:
-    path: /concert/update/{id}
-    defaults: { _controller: FRHollenBundle:Admin:updateConcert }
+    path: /concert/add/{id}
+    defaults: { _controller: FRHollenBundle:Admin:addConcert, id: null }
     requirements:
         id: \d+
 

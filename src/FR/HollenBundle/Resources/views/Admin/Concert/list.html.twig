@@ -18,22 +18,28 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Genre</th>
+                    <th>Stage</th>
+                    <th>Groupe</th>
+                    <th>Début</th>
+                    <th>Fin</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                {% for genre in genres %}
+                {% for concert in concerts %}
                 <tr>
                     <td>{{ loop.index }}</td>
-                    <td>{{ genre.name }}</td>
+                    <td>{{ concert.stage.name }}</td>
+                    <td>{{ concert.rockband.name }}</td>
+                    <td>{{ concert.beginTime.format("h:i d/m/Y") }}</td>
+                    <td>{{ concert.endTime.format("h:i d/m/Y") }}</td>
                     <td>
                         <div class="btn-group btn-group-xs pull-right">
-                            <a href="{{ path('fr_hollen_update_genre',{ 'id':genre.id }) }}" class="btn btn-warning">
+                            <a href="{{ path('fr_hollen_add_concert',{ 'id':concert.id }) }}" class="btn btn-warning">
                                 <span class="glyphicon glyphicon-asterisk"></span>
                                 <span class="hidden-xs">Modifier</span>
                             </a>
-                            <a href="{{ path('fr_hollen_remove_genre',{ 'id':genre.id }) }}" class="btn btn-danger">
+                            <a href="{{ path('fr_hollen_remove_concert',{ 'id':concert.id }) }}" class="btn btn-danger">
                                 <span class="glyphicon glyphicon-remove"></span>
                                 <span class="hidden-xs">Supprimer</span>
                             </a>

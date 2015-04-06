@@ -5,12 +5,6 @@
     
     {% include "FRHollenBundle::Component/menu.html.twig" %}
     
-    {% for key, message in app.session.flashbag.all() %}
-    <div class="alert alert-{{ key }}">
-        {{ message|trans({}, 'FOSUserBundle') }}
-    </div>
-    {% endfor %}
-    
     {% block content %}
         {% block fos_user_content %}{% endblock %}
     {% endblock %}   

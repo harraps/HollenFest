@@ -39,6 +39,14 @@ class Concert
     protected $rockband;
 
     /**
+     * @var Stage
+     * 
+     * @ORM\ManyToOne(targetEntity="Stage", cascade={"persist"})
+     * @Expose
+     */
+    protected $stage;
+    
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="beginTime", type="datetime")
@@ -67,8 +75,8 @@ class Concert
     /**
      * Set rockband
      *
-     * @param \stdClass $rockband
-     * @return Concert
+     * @param Rockband $rockband
+     * @return Rockband
      */
     public function setRockband(RockBand $rockband)
     {
@@ -79,13 +87,65 @@ class Concert
     /**
      * Get rockband
      *
-     * @return \stdClass 
+     * @return Rockband 
      */
     public function getRockband()
     {
         return $this->rockband;
     }
 
+    /**
+     * Set stage
+     * 
+     * @param  Stage $stage
+     * @return Stage
+     */
+    public function setStage(Stage $stage)
+    {
+        $this->stage = $stage;
+        return $this;
+    }
+    
+    /**
+     * Get stage
+     * 
+     * @return Stage
+     */
+    public function getStage()
+    {
+        return $this->stage;
+    }
+    
+    /**
+     * Clear space for the concert in the given array
+     * 
+     * @param  Concert array &$concerts
+     * @return array
+     */
+    public function clearSpace( array &$concerts )
+    {
+        foreach( $concerts as $key => &$c ){
+            if( !$c->checkSpace($concert) ){
+                // we remove the $c
+                unset( $this->concerts[$key] );
+            }
+        }
+        return $concerts;
+    }
+    
+    /**
+     * Clear space for the concert and add it to the array
+     * 
+     * @param  Concert array &$concerts
+     * @return array
+     */
+    public function clearSpaceAndAdd( array &$concerts )
+    {
+        $this->clearSpace($concerts);
+        $concerts[] = $this;
+        return $concerts;
+    }
+    
     /**
      * Set both begin and end times and make sure that there is atleast 20min between them
      * 

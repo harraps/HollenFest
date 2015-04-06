@@ -3,8 +3,8 @@
 {% block content %}
 <div class="page-header">
     <h1>
-        List des genres
-        <a href="{{ path('fr_hollen_add_genre') }}" class="btn btn-success btn-lg pull-right">
+        List des stages
+        <a href="{{ path('fr_hollen_add_stage') }}" class="btn btn-success btn-lg pull-right">
             <span class="glyphicon glyphicon-plus"></span>
             <span class="hidden-xs">Ajouter</span>
         </a>
@@ -18,22 +18,22 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Genre</th>
+                    <th>Scène</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                {% for genre in genres %}
+                {% for stage in stages %}
                 <tr>
                     <td>{{ loop.index }}</td>
-                    <td>{{ genre.name }}</td>
+                    <td>{{ stage.name }}</td>
                     <td>
                         <div class="btn-group btn-group-xs pull-right">
-                            <a href="{{ path('fr_hollen_add_genre',{ 'id':genre.id }) }}" class="btn btn-warning">
+                            <a href="{{ path('fr_hollen_add_stage',{ 'id':stage.id }) }}" class="btn btn-warning">
                                 <span class="glyphicon glyphicon-asterisk"></span>
                                 <span class="hidden-xs">Modifier</span>
                             </a>
-                            <a href="{{ path('fr_hollen_remove_genre',{ 'id':genre.id }) }}" class="btn btn-danger">
+                            <a href="{{ path('fr_hollen_remove_stage',{ 'id':stage.id }) }}" class="btn btn-danger">
                                 <span class="glyphicon glyphicon-remove"></span>
                                 <span class="hidden-xs">Supprimer</span>
                             </a>
