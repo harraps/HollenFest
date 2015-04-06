@@ -1,4 +1,6 @@
 {% extends "FRHollenBundle::layout.html.twig" %}
+{% form_theme form 'FRHollenBundle:Form:fields.html.twig' %}
+{#% form_theme form 'FRHollenBundle:Form:datetime.html.twig' %#}
 
 {% block content %}
 <div class="page-header">
@@ -7,11 +9,65 @@
     </h1>
 </div>
 
+<style>
+    /*select.form-control
+    {
+        height: 29px;
+        overflow: hidden;
+        background: no-repeat scroll 96% 0px transparent;
+        border: none;
+        font-size: 14px;
+        padding: 5px;
+        color: #fff;
+        background-color: #000;
+    }*/
+</style>
+
 <div class="row">
-    <div class="col-lg-12">
-        <div class="well">
-            {{ form(form) }}
-        </div>
+    <div class="col-lg-offset-3 col-lg-6  col-md-offset-2 col-md-8 col-sm-offset-1 col-sm-10">
+        {{ form_start(form,{'attr':{'class':'form-horizontal well'}}) }}
+            
+            {# print errors in the form #}
+            {{ form_errors(form) }}
+            
+            <div class="row">
+                <div class="col-sm-6">
+                    <strong>Scène du concert</strong>
+                    {{ form_widget(form.stage) }}
+                </div>
+                <div class="col-sm-6">
+                    <strong>Groupe du concert</strong>
+                    {{ form_widget(form.rockband) }}
+                </div>
+            </div>
+            
+            <br/><br/>
+            
+            <div class="form-group">
+                {{ form_label(form.beginTime, "Heure de début", {'label_attr':{'class': 'col-sm-4 control-label'}}) }}
+                {{ form_errors(form.beginTime) }}
+                <div class="col-sm-8">
+                    {{ form_widget(form.beginTime) }}
+                </div>
+            </div>
+            
+            <div class="form-group">
+                {{ form_label(form.endTime, "Heure de fin", {'label_attr':{'class': 'col-sm-4 control-label'}}) }}
+                {{ form_errors(form.endTime) }}
+                <div class="col-sm-8">
+                    {{ form_widget(form.endTime) }}
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <div class="col-sm-offset-9 col-sm-3">
+                    {{ form_widget(form.save, {'attr': {'class': 'btn btn-success btn-lg btn-block'}}) }}
+                </div>
+            </div>
+            
+            {{ form_rest(form) }}
+
+        {{ form_end(form) }}
     </div>
 </div>
 

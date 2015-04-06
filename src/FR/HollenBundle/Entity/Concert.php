@@ -151,7 +151,7 @@ class Concert
      * 
      * @return Concert
      */
-    public function setTimes(DateTime $beginTime, DateTime $endTime )
+    public function setTimes($beginTime, $endTime )
     {
         $diff = $beginTime->diff( $endTime )->getTimestamp();
         
@@ -171,7 +171,7 @@ class Concert
      * @param \DateTime $beginTime
      * @return Concert
      */
-    public function setBeginTime(DateTime $beginTime)
+    public function setBeginTime($beginTime)
     {
         $this->beginTime = $beginTime;
         return $this;
@@ -211,7 +211,7 @@ class Concert
      * @param \DateTime $endTime
      * @return Concert
      */
-    public function setEndTime(DateTime $endTime)
+    public function setEndTime($endTime)
     {
         $this->endTime = $endTime;
         return $this;

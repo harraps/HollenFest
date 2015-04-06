@@ -301,6 +301,12 @@ class AdminController extends Controller
         }
 
         $form = $this->get('form.factory')->createBuilder('form', $concert)
+            ->add( 'rockband', 'entity', array(
+                'class' => 'FRHollenBundle:Rockband',
+                'property' => 'name',
+                'multiple' => false,
+                'expanded' => true
+            ))
             ->add( 'stage', 'entity', array(
                 'class' => 'FRHollenBundle:Stage',
                 'property' => 'name',
@@ -309,12 +315,6 @@ class AdminController extends Controller
             ))
             ->add( 'beginTime', 'datetime' )
             ->add( 'endTime', 'datetime' )
-            ->add( 'rockband', 'entity', array(
-                'class' => 'FRHollenBundle:Rockband',
-                'property' => 'name',
-                'multiple' => false,
-                'expanded' => true
-            ))
             ->add( 'save', 'submit' )
             ->getForm();
 
@@ -324,10 +324,22 @@ class AdminController extends Controller
         // we check that the values are correct
         if( $form->isValid() ){
 
+            // we have to remove all the other concert overlaping with the new one
+            $repository = $this
+                ->getDoctrine()
+                ->getManager()
+                ->getRepository('FRHollenBundle:Concert');
+            $concerts = $repository->findByStage($concert->getStage());
+            
+            $concert->clearSpaceAndAdd($concerts);
+            
             // we save the genre in the database
             $em = $this->getDoctrine()->getManager();
-            $em->persist($concert);
-            $em->flush();
+            foreach( $concerts as &$c ){
+                $em->persist($c);
+                $em->flush();
+                $em->clear();
+            }
 
             // we redirect the the list of genres
             return $this->listConcertsAction();

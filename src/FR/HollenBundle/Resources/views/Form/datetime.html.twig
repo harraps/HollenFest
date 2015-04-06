@@ -1,0 +1,21 @@
+{# src/FR/HollenBundle/Resources/views/Form/datetime.html.twig #}
+
+{#% extends 'form_div_layout.html.twig' %#}
+
+{% block datetime_widget %}
+    {% spaceless %}
+        <div {{ block('widget_container_attributes') }}>
+        <table>
+            <tr>
+                <td>{{ form_widget(form.time.hour, { 'attr': { 'size': '1' } }) }}</td>
+                <td>:</td>
+                <td>{{ form_widget(form.time.minute, { 'attr': { 'size': '1' } }) }}</td>
+                
+                <td>{{ form_widget(form.date.day) }}{{ form_errors(form.date.day) }}</td>
+                <td>{{ form_widget(form.date.month) }}{{ form_errors(form.date.month) }}</td>
+                <td>{{ form_widget(form.date.year) }}{{ form_errors(form.date.year) }}</td>
+            </tr>
+        </table>
+        </div>
+    {% endspaceless %}
+{% endblock datetime_widget %}
