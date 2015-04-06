@@ -3,12 +3,18 @@ fr_hollen_homepage:
     path: /home
     defaults: { _controller: FRHollenBundle:Default:index }
 
+fr_hollen_edit_user:
+    path: /edit/user
+    defaults: { _controller: FRHollenBundle:Default:editUser }
+
 fr_hollen_planning:
-    path: /planning/{stage}/{day}
-    defaults: { _controller: FRHollenBundle:Default:planning, stage: ALL, day: ALL }
+    path: /planning/{stage}/{begin}.{end}/{genre}
+    defaults: { _controller: FRHollenBundle:Default:planning, stage: ALL, begin: NO_BEGIN, end: NO_END, genre: ANY }
     requirements:
-        stage: ([A-Za-z0-9\-])*
-        day: (\d{2})|(ALL)
+        stage: (\d+)|(ALL)
+        begin: (\d+)|(NO_BEGIN)
+        end:   (\d+)|(NO_END)
+        genre: (\d+)|(ANY)
 
 # Users
 fr_hollen_list_users:
@@ -19,19 +25,40 @@ fr_hollen_grant_user:
     path: /user/grant/{id}
     defaults: { _controller: FRHollenBundle:Admin:grantUser }
     requirements:
-        id: \d*
+        id: \d+
 
 fr_hollen_ungrant_user:
     path: /user/ungrant/{id}
     defaults: { _controller: FRHollenBundle:Admin:ungrantUser }
     requirements:
-        id: \d*
+        id: \d+
 
 fr_hollen_remove_user:
     path: /user/remove/{id}
     defaults: { _controller: FRHollenBundle:Admin:removeUser }
     requirements:
-        id: \d*
+        id: \d+
+
+# Genres
+fr_hollen_list_genres:
+    path: /genre/list
+    defaults: { _controller: FRHollenBundle:Admin:listGenres }
+
+fr_hollen_add_genre:
+    path: /genre/add
+    defaults: { _controller: FRHollenBundle:Admin:addGenre }
+
+fr_hollen_update_genre:
+    path: /genre/update/{id}
+    defaults: { _controller: FRHollenBundle:Admin:updateGenre }
+    requirements:
+        id: \d+
+
+fr_hollen_remove_genre:
+    path: /genre/remove/{id}
+    defaults: { _controller: FRHollenBundle:Admin:removeGenre }
+    requirements:
+        id: \d+
 
 # Rockbands
 fr_hollen_list_rockbands:
@@ -46,13 +73,13 @@ fr_hollen_update_rockband:
     path: /rockband/update/{id}
     defaults: { _controller: FRHollenBundle:Admin:updateRockband }
     requirements:
-        id: \d*
+        id: \d+
 
 fr_hollen_remove_rockband:
     path: /rockband/remove/{id}
     defaults: { _controller: FRHollenBundle:Admin:removeRockband }
     requirements:
-        id: \d*
+        id: \d+
 
 # Concerts
 fr_hollen_list_concerts:
@@ -67,12 +94,15 @@ fr_hollen_update_concert:
     path: /concert/update/{id}
     defaults: { _controller: FRHollenBundle:Admin:updateConcert }
     requirements:
-        id: \d*
+        id: \d+
 
 fr_hollen_remove_concert:
     path: /concert/remove/{id}
     defaults: { _controller: FRHollenBundle:Admin:removeConcert }
     requirements:
-        id: \d*
+        id: \d+
 
-# 
+# Other
+fr_hollen_other:
+    path: /spaghetti
+    defaults: { _controller: FRHollenBundle:Default:other }

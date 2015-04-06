@@ -97,4 +97,34 @@ class Rockband
     {
         return $this->genres;
     }
+    
+    /**
+     * Is the rockband of the given genre
+     * 
+     * @param Genre $genre
+     * @return boolean
+     */
+    public function isGenre( Genre $genre )
+    {
+        if( $this->isGenreById( $genre->getId() ) ){
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Is the rockband of the given genre using genre id
+     * 
+     * @param  int $genre_id id of the genre
+     * @return boolean
+     */
+    public function isGenreById( $genre_id )
+    {
+        foreach( $this->genres as &$g ){
+            if( $g->getId() == $genre_id ){
+                return true;
+            }
+        }
+        return false;
+    }
 }
