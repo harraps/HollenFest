@@ -251,18 +251,18 @@ class Concert
     }
     
     /**
-     * return true if the concert doesn't use the same space
+     * return true if the concert doesn't overlap
      * @param Concert $concert
      */
     public function checkSpace(Concert $concert)
     {
         if(
             (
-                $this->beginint() > $concert->beginintmargin() &&
-                $this->endint()   > $concert->beginintmargin()
+                $this->beginint() < $concert->beginintmargin() &&
+                $this->endint()   < $concert->beginintmargin()
             )||(
-                $this->beginint() < $concert->endintmargin() &&
-                $this->endint()   < $concert->endintmargin()
+                $this->beginint() > $concert->endintmargin() &&
+                $this->endint()   > $concert->endintmargin()
             )
         ){
             return true;
