@@ -3,6 +3,7 @@
 namespace FR\HollenBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\Groups;
@@ -17,8 +18,10 @@ use JMS\Serializer\Annotation\VirtualProperty;
 class Concert
 {
     
-    // minimal amount of minutes between begin and end of the concert
-    const MINTIME = 20;
+    const MARGINTIME = 20; // minimal time between 2 concerts
+    
+    const MINTIME = 30; // minimal length of concert
+    const MAXTIME = 360; // maximal length of concert
     
     /**
      * @var integer
@@ -33,7 +36,8 @@ class Concert
     /**
      * @var Rockband
      *
-     * @ORM\OneToOne(targetEntity="Rockband", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Rockband", cascade={"persist"})
+     * @ORM\JoinColumn(name="rockband_id", referencedColumnName="id")
      * @Expose
      */
     protected $rockband;
@@ -42,6 +46,7 @@ class Concert
      * @var Stage
      * 
      * @ORM\ManyToOne(targetEntity="Stage", cascade={"persist"})
+     * @ORM\JoinColumn(name="stage_id", referencedColumnName="id")
      * @Expose
      */
     protected $stage;
@@ -50,6 +55,7 @@ class Concert
      * @var \DateTime
      *
      * @ORM\Column(name="beginTime", type="datetime")
+     * @Assert\DateTime()
      * @Expose
      */
     protected $beginTime;
@@ -58,6 +64,7 @@ class Concert
      * @var \DateTime
      *
      * @ORM\Column(name="endTime", type="datetime")
+     * @Assert\DateTime()
      * @Expose
      */
     protected $endTime;
@@ -117,33 +124,26 @@ class Concert
     }
     
     /**
-     * Clear space for the concert in the given array
+     * Check that the times in the object are valid
      * 
-     * @param  Concert array &$concerts
-     * @return array
+     * @return boolean
      */
-    public function clearSpace( array &$concerts )
+    public function checkTimes()
     {
-        foreach( $concerts as $key => &$c ){
-            if( !$c->checkSpace($concert) ){
-                // we remove the $c
-                unset( $this->concerts[$key] );
+        $diff = $this->beginTime->diff( $this->endTime );
+            
+        // if the interval is not negative
+        if( !$diff->invert ){
+            
+            $diff_int = ( $diff->i + 60*($diff->h + 24*$diff->d) );
+            if(
+                self::MINTIME <= $diff_int &&
+                self::MAXTIME >= $diff_int
+            ){
+                return true;
             }
         }
-        return $concerts;
-    }
-    
-    /**
-     * Clear space for the concert and add it to the array
-     * 
-     * @param  Concert array &$concerts
-     * @return array
-     */
-    public function clearSpaceAndAdd( array &$concerts )
-    {
-        $this->clearSpace($concerts);
-        $concerts[] = $this;
-        return $concerts;
+        return false;
     }
     
     /**
@@ -157,7 +157,12 @@ class Concert
         
         // if the interval is not negative
         if( !$diff->invert ){
-            if( $this->MINTIME <= ( $diff->i + 60*( $diff->h + 24*$diff->d ) ) ){
+            
+            $diff_int = ( $diff->i + 60*($diff->h + 24*$diff->d) );
+            if(
+                self::MINTIME <= $diff_int &&
+                self::MAXTIME >= $diff_int
+            ){
                 $this->beginTime = $beginTime;
                 $this->endTime = $endTime;
             }
@@ -202,7 +207,7 @@ class Concert
      */
     public function beginintmargin()
     {
-        return (int)($this->beginTime->getTimestamp()/60) - $this->MINTIME;
+        return (int)($this->beginTime->getTimestamp()/60) - self::MARGINTIME;
     }
     
     /**
@@ -242,7 +247,7 @@ class Concert
      */
     public function endintmargin()
     {
-        return (int)($this->endTime->getTimestamp()/60) + $this->MINTIME;
+        return (int)($this->endTime->getTimestamp()/60) + self::MARGINTIME;
     }
     
     /**

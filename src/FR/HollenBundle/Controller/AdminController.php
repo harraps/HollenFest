@@ -67,9 +67,9 @@ class AdminController extends Controller
             ->getDoctrine()
             ->getManager()
             ->getRepository('FRHollenBundle:Genre');
-
+        
         $genres = $repository->findAll();
-
+        
         return $this->render('FRHollenBundle:Admin:Genre/list.html.twig', array(
             'genres' => $genres
         ));
@@ -136,9 +136,9 @@ class AdminController extends Controller
             ->getDoctrine()
             ->getManager()
             ->getRepository('FRHollenBundle:Rockband');
-
+        
         $rockbands = $repository->findAll();
-
+        
         return $this->render('FRHollenBundle:Admin:Rockband/list.html.twig', array(
             'rockbands' => $rockbands
         ));
@@ -155,7 +155,7 @@ class AdminController extends Controller
                 ->getRepository('FRHollenBundle:Rockband')
                 ->find($id);
         }
-
+        
         $form = $this->get('form.factory')->createBuilder('form', $rockband)
             ->add( 'name', 'text' )
             ->add( 'genres', 'entity', array(
@@ -166,22 +166,22 @@ class AdminController extends Controller
             ))
             ->add( 'save', 'submit' )
             ->getForm();
-
+        
         // we make a link between the request and the form
         $form->handleRequest($request);
-
+        
         // we check that the values are correct
         if( $form->isValid() ){
-
+            
             // we save the genre in the database
             $em = $this->getDoctrine()->getManager();
             $em->persist($rockband);
             $em->flush();
-
+            
             // we redirect the the list of genres
             return $this->listRockbandsAction();
         }
-
+        
         // here the request is invalid so we return to the form
         return $this->render('FRHollenBundle:Admin:Rockband/add.html.twig', array(
             'form' => $form->createView()
@@ -196,7 +196,7 @@ class AdminController extends Controller
             ->getManager()
             ->getRepository('FRHollenBundle:Rockband');
         $rockband = $repository->find($id);
-
+        
         // than we delete it
         $entityMan = $this->getDoctrine()->getEntityManager();
         $entityMan->remove($rockband);
@@ -211,14 +211,14 @@ class AdminController extends Controller
             ->getDoctrine()
             ->getManager()
             ->getRepository('FRHollenBundle:Stage');
-
+        
         $stages = $repository->findAll();
-
+        
         return $this->render('FRHollenBundle:Admin:Stage/list.html.twig', array(
             'stages' => $stages
         ));
     }
-
+    
     public function addStageAction(Request $request, $id = null)
     {
         $stage;
@@ -230,33 +230,33 @@ class AdminController extends Controller
                 ->getRepository('FRHollenBundle:Stage')
                 ->find($id);
         }
-
+        
         $form = $this->get('form.factory')->createBuilder('form', $stage)
             ->add( 'name', 'text' )
             ->add( 'save', 'submit' )
             ->getForm();
-
+        
         // we make a link between the request and the form
         $form->handleRequest($request);
-
+        
         // we check that the values are correct
         if( $form->isValid() ){
-
+            
             // we save the genre in the database
             $em = $this->getDoctrine()->getManager();
             $em->persist($stage);
             $em->flush();
-
+            
             // we redirect the the list of genres
             return $this->listStagesAction();
         }
-
+        
         // here the request is invalid so we return to the form
         return $this->render('FRHollenBundle:Admin:Stage/add.html.twig', array(
             'form' => $form->createView()
         ));
     }
-
+    
     public function removeStageAction($id)
     {
         // first we find the object in the database
@@ -265,7 +265,7 @@ class AdminController extends Controller
             ->getManager()
             ->getRepository('FRHollenBundle:Stage');
         $stage = $repository->find($id);
-
+        
         // than we delete it
         $entityMan = $this->getDoctrine()->getEntityManager();
         $entityMan->remove($stage);
@@ -280,9 +280,9 @@ class AdminController extends Controller
             ->getDoctrine()
             ->getManager()
             ->getRepository('FRHollenBundle:Concert');
-
+        
         $concerts = $repository->findAll();
-
+        
         return $this->render('FRHollenBundle:Admin:Concert/list.html.twig', array(
             'concerts' => $concerts
         ));
@@ -299,7 +299,7 @@ class AdminController extends Controller
                 ->getRepository('FRHollenBundle:Concert')
                 ->find($id);
         }
-
+        
         $form = $this->get('form.factory')->createBuilder('form', $concert)
             ->add( 'rockband', 'entity', array(
                 'class' => 'FRHollenBundle:Rockband',
@@ -317,34 +317,55 @@ class AdminController extends Controller
             ->add( 'endTime', 'datetime' )
             ->add( 'save', 'submit' )
             ->getForm();
-
+        
         // we make a link between the request and the form
         $form->handleRequest($request);
-
+        
         // we check that the values are correct
+        // and that the times are correct
         if( $form->isValid() ){
-
-            // we have to remove all the other concert overlaping with the new one
-            $repository = $this
-                ->getDoctrine()
-                ->getManager()
-                ->getRepository('FRHollenBundle:Concert');
-            $concerts = $repository->findByStage($concert->getStage());
             
-            $concert->clearSpaceAndAdd($concerts);
-            
-            // we save the genre in the database
-            $em = $this->getDoctrine()->getManager();
-            foreach( $concerts as &$c ){
-                $em->persist($c);
+            if( $concert->checkTimes() ){
+                
+                // we have to remove all the other concert overlaping with the new one
+                $repository = $this
+                    ->getDoctrine()
+                    ->getManager()
+                    ->getRepository('FRHollenBundle:Concert');
+                
+                // we want a list of other concerts on the same stage
+                $concerts_stage = $repository->findByStage($concert->getStage());
+                
+                // we want a list of other concerts with the same rockband
+                $concerts_band = $repository->findByRockband($concert->getRockband());
+                
+                $em = $this->getDoctrine()->getManager();
+                
+                // if the concert overlap with other concerts on the same stage, we remove them
+                foreach( $concerts_stage as &$c ){
+                    if( $concert->checkSpace($c) ){
+                        $em->remove($concert);
+                        $em->flush();
+                    }
+                }
+                
+                // if the concert overlap with other concerts with the same group, we remove them
+                foreach( $concerts_band as &$c ){
+                    if( $concert->checkSpace($c) ){
+                        $em->remove($concert);
+                        $em->flush();
+                    }
+                }
+                
+                // we finally save the concert
+                $em->persist($concert);
                 $em->flush();
-                $em->clear();
+                
+                // we redirect the the list of genres
+                return $this->listConcertsAction();
             }
-
-            // we redirect the the list of genres
-            return $this->listConcertsAction();
         }
-
+        
         // here the request is invalid so we return to the form
         return $this->render('FRHollenBundle:Admin:Concert/add.html.twig', array(
             'form' => $form->createView()
@@ -359,7 +380,7 @@ class AdminController extends Controller
             ->getManager()
             ->getRepository('FRHollenBundle:Concert');
         $concert = $repository->find($id);
-
+        
         // than we delete it
         $entityMan = $this->getDoctrine()->getEntityManager();
         $entityMan->remove($concert);

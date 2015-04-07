@@ -31,8 +31,8 @@
                     <td>{{ loop.index }}</td>
                     <td>{{ concert.stage.name }}</td>
                     <td>{{ concert.rockband.name }}</td>
-                    <td>{{ concert.beginTime.format("h:i d/m/Y") }}</td>
-                    <td>{{ concert.endTime.format("h:i d/m/Y") }}</td>
+                    <td>{{ concert.beginTime.format("H:i - d/m/Y") }}</td>
+                    <td>{{ concert.endTime.format("H:i - d/m/Y") }}</td>
                     <td>
                         <div class="btn-group btn-group-xs pull-right">
                             <a href="{{ path('fr_hollen_add_concert',{ 'id':concert.id }) }}" class="btn btn-warning">

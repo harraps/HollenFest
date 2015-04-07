@@ -1,6 +1,5 @@
 {% extends "FRHollenBundle::layout.html.twig" %}
 {% form_theme form 'FRHollenBundle:Form:fields.html.twig' %}
-{#% form_theme form 'FRHollenBundle:Form:datetime.html.twig' %#}
 
 {% block content %}
 <div class="page-header">
@@ -10,17 +9,19 @@
 </div>
 
 <style>
-    /*select.form-control
-    {
-        height: 29px;
-        overflow: hidden;
-        background: no-repeat scroll 96% 0px transparent;
-        border: none;
-        font-size: 14px;
+    .select select{
+        background: transparent;
         padding: 5px;
-        color: #fff;
-        background-color: #000;
-    }*/
+        font-size: 16px;
+        color: #ddd;
+        border: 1px solid #ccc;
+        height: 34px;
+        -webkit-appearance: none;
+    }
+    .select{
+        height: 34px;
+        overflow: hidden;
+    }
 </style>
 
 <div class="row">
@@ -47,7 +48,15 @@
                 {{ form_label(form.beginTime, "Heure de début", {'label_attr':{'class': 'col-sm-4 control-label'}}) }}
                 {{ form_errors(form.beginTime) }}
                 <div class="col-sm-8">
-                    {{ form_widget(form.beginTime) }}
+                    <table>
+                        <tr>
+                            <td class="select">{{ form_widget(form.beginTime.time.hour) }}</td>
+                            <td class="select">{{ form_widget(form.beginTime.time.minute) }}</td>
+                            <td class="select">{{ form_widget(form.beginTime.date.day) }}</td>
+                            <td class="select">{{ form_widget(form.beginTime.date.month) }}</td>
+                            <td class="select">{{ form_widget(form.beginTime.date.year) }}</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
             
@@ -55,7 +64,15 @@
                 {{ form_label(form.endTime, "Heure de fin", {'label_attr':{'class': 'col-sm-4 control-label'}}) }}
                 {{ form_errors(form.endTime) }}
                 <div class="col-sm-8">
-                    {{ form_widget(form.endTime) }}
+                    <table>
+                        <tr>
+                            <td class="select">{{ form_widget(form.endTime.time.hour) }}</td>
+                            <td class="select">{{ form_widget(form.endTime.time.minute) }}</td>
+                            <td class="select">{{ form_widget(form.endTime.date.day) }}</td>
+                            <td class="select">{{ form_widget(form.endTime.date.month) }}</td>
+                            <td class="select">{{ form_widget(form.endTime.date.year) }}</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
             
