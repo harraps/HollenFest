@@ -25,18 +25,28 @@
     {% for name,stage in stages %}
     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
         <strong class="text-center">{{ name }}</strong>
-        <svg id="{{ loop.index0 }}" height="100%" width="100%" viewBox="0 0 100 {{ end - begin }}">
-            {% for concert in stage %}
-            <g>
-                <rect x="5" y="{{ concert.beginint - begin }}" width="90" height="{{ concert.endint - concert.beginint }}" ry="10" style="fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)" />
-                <text x="50" y="{{ concert.beginint - begin + 20 }}" text-anchor="middle" style="font-size:10px;" fill="white">{{ concert.rockband.name }}</text>
-                <text x="50" y="{{ concert.beginint - begin + 30 }}" text-anchor="middle" style="font-size:10px;" fill="gray">{{ concert.beginTime.format("H:i - d/m/Y") }}</text>
-                <text x="50" y="{{ concert.beginint - begin + 40 }}" text-anchor="middle" style="font-size:10px;" fill="gray">{{ concert.endTime.format("H:i - d/m/Y") }}</text>
+        <svg id="stage-{{ loop.index0 }}" height="100%" width="100%" viewBox="0 0 100 {{ end - begin }}">
+            <g id="linegroup-{{ loop.index0 }}">
             </g>
-            {% endfor %}
+            <g id="concerts-{{ loop.index0 }}">
+                {% for concert in stage %}
+                <g>
+                    <rect x="5" y="{{ concert.beginint - begin }}" width="90" height="{{ concert.endint - concert.beginint }}" ry="10" style="fill:#0f0f0f;stroke-width:3;stroke:rgb(0,0,0)" />
+                    <text x="50" y="{{ concert.beginint - begin + 20 }}" text-anchor="middle" style="font-size:10px;" fill="white">{{ concert.rockband.name }}</text>
+                    <text x="50" y="{{ concert.beginint - begin + 30 }}" text-anchor="middle" style="font-size:10px;" fill="gray">{{ concert.beginTime.format("H:i - d/m/Y") }}</text>
+                    <text x="50" y="{{ concert.beginint - begin + 40 }}" text-anchor="middle" style="font-size:10px;" fill="gray">{{ concert.endTime.format("H:i - d/m/Y") }}</text>
+                </g>
+                {% endfor %}
+            </g>
         </svg>
     </div>
     {% endfor %}
 </div>
+
+<script>
+    $( document ).ready(function() {
+        hollen.init( {{ stages|length }} );
+    });
+</script>
 
 {% endblock %}
