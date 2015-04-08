@@ -4,6 +4,7 @@
 var hollen = {};
 
 hollen.stages = {};
+hollen.linegroups = {};
 hollen.concerts = {};
 hollen.runningOrder;
 hollen.orders = {};
@@ -16,18 +17,19 @@ hollen.orders = {};
 hollen.init = function( nbStages ){
     
     hollen.runningOrder = Snap("#runningOrder");
-    hollen.addLines( hollen.runningOrder );
+    //hollen.addLines( hollen.runningOrder );
     
     for( var i=0; i<nbStages; ++i ){
         
-        hollen.stages[i] = Snap("#"+i);
-        hollen.addLines( hollen.stages[i] );
+        hollen.stages[i] = Snap("#stage-"+i);
+        hollen.linegroups[i] = hollen.stages[i].select("#linegroup-"+i);
+        hollen.concerts[i] = hollen.stages[i].select("#concerts-"+i).selectAll("g");
         
-        hollen.concerts[i] = hollen.stages[i].selectAll("g");
+        hollen.addLines(i);
         
         for( var j=0; j<hollen.concerts[i].length; ++j ){
             
-            hollen.concerts[i][j].hover(
+            hollen.concerts[i][j].select("rect").hover(
                 function(){
                     // if element is hovered
                     this.attr({ stroke: "#fff" });
@@ -40,10 +42,12 @@ hollen.init = function( nbStages ){
                 function(){
                     // when object is clicked
                     var copy = this.clone();
-                    copy.append(hollen.runningOrder);
+                    
+                    copy.append(hollen.runningOrder); // TODO fix this !
+                    
                     hollen.checkOverlap( copy );
                     // we want to be able to remove an item from the runningOrder without replacing it with an other
-                    copy.hover(
+                    copy.select("rect").hover(
                         function(){
                             // if element is hovered
                             this.attr({ stroke: "#f00" });
@@ -102,18 +106,19 @@ hollen.removeFromRunningOrder = function( element ){
     }
 };
 
-hollen.addLines = function( stage ){
+hollen.addLines = function( nb ){
+    
     // we want to have lines to symbolize hours
     // in our planning, 1px = 1min so 60px = 1hour
-    var bbox = stage.getBBox();
+    var bbox = hollen.stages[nb].getBBox();
     
     // for weird reason we have to mutiply by ten to have the right result
     var stage_height = bbox.height * 10;
     
     for( var i=60; i<stage_height; i+=60 ){
-        var line = stage.line( 0, i, 100, i );
+        var line = hollen.linegroups[nb].line( 0, i, 100, i );
         line.attr({
-            stroke: "#000",
+            stroke: "#141414",
             strokeWidth: 1
         });
     }
