@@ -16,106 +16,86 @@ class DefaultController extends Controller
         
     }
     
-    public function planningAction($stage, $begin, $end, $genre)
+    public function planningAction($stage_id, $begin_int, $end_int, $genre_id)
     {
         // we send the running order of the user so he could edit it
         $runningOrder = $this->getUser()->getRunningOrder();
         
-        $repository = $this
+        $repo_stages = $this
             ->getDoctrine()
             ->getManager()
             ->getRepository('FRHollenBundle:Stage');
         
+        $repo_concerts = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('FRHollenBundle:Concert');
+        
         // we search for the stages asked by the user
-        $stages = [];
-        if( $stage == "ALL" ){ // we want all the stages
-            $stages = $repository->findAll();
+        $concerts_stage = [];
+        if( $stage_id == "ALL" ){ // we want all the stages
+            $stages = $repo_stages->findAll();
+            foreach( $stages as &$stage ){
+                $concerts_stage[$stage->getName()] = $repo_concerts->findByStage($stage);
+            }
         }else{ // we only want the given stage
-            $stages = $repository->findById($stage);
+            $stage = $repo_stages->findById($stage_id);
+            $concerts_stage[$stage->getName()] = $repo_concerts->findByStage($stage);
         }
         
         // we search for all the concerts starting after the begin time
-        $stages_begin = [];
-        if( $begin == "NO_BEGIN" ){
-            $stages_begin = $stages;
-        }else{
-            $begin = (int) $begin;
-            foreach( $stages as &$s ){
-                $concerts = [];
-                foreach( $s->getConcerts() as &$concert ){
+        if( $begin_int != "NO_BEGIN" ){
+            $begin_int = (int) $begin_int;
+            foreach( $concerts_stage as &$s ){
+                foreach( $s as $key => &$concert ){
                     // we only want the concerts starting after the begin time
-                    if( $concert->beginint() >= $begin ){
-                        $concerts[] = $concert;
+                    if( $concert->beginint() < $begin_int ){
+                        unset($s[$key]); // the concert doesn't match the requirement, we remove it
                     }
                 }
-                // we create a new stage object to store the concerts
-                $new_stage = new Stage();
-                $new_stage->setId($s->getId())
-                    ->setName($s->getName())
-                    ->setConcerts($concerts);
-                $stages_begin[] = $new_stage; 
             }
         }
         
         // we search for all the concerts ending after the end time
-        $stages_end = [];
-        if( $end == "NO_END" ){
-            $stages_end = $stages_begin;
-        }else{
-            $end = (int) $end;
-            foreach( $stages_begin as &$s ){
-                $concerts = [];
-                foreach( $s->getConcerts() as &$concert ){
+        if( $end_int != "NO_END" ){
+            $end_int = (int) $end_int;
+            foreach( $concerts_stage as &$s ){
+                foreach( $s as $key => &$concert ){
                     // we only want the concert ending before the end time
-                    if( $concert->endint() <= $end ){
-                        $concerts[] = $concert;
+                    if( $concert->endint() > $end_int ){
+                        unset($s[$key]); // the concert doesn't match the requirement, we remove it
                     }
                 }
-                // we create a new stage object to store the concerts
-                $new_stage = new Stage();
-                $new_stage->setId($s->getId())
-                    ->setName($s->getName())
-                    ->setConcerts($concerts);
-                $stages_end[] = $new_stage; 
             }
         }
         
         // we search for the concerts featuring a rockband of the given genre
-        $result = [];
         $genre_name;
-        if( $genre == "ANY" ){
-            $result = $stages_end;
+        if( $genre_id == "ANY" ){
             $genre_name = "ANY";
         }else{
-            $genre = (int) $genre;
-            foreach( $stages_end as &$s ){
-                $concerts = [];
-                foreach( $s->getConcerts() as &$concert ){
+            $genre_id = (int) $genre_id;
+            foreach( $concerts_stage as &$s ){
+                foreach( $s as $key => &$concert ){
                     // we only want the rockbands of the given genre
-                    if( $concert->getRockband()->isGenreById($genre) ){
-                        $concerts[] = $concert;
+                    if( !$concert->getRockband()->isGenreById($genre_id) ){
+                        unset($s[$key]); // the concert doesn't match the requirement, we remove it
                     }
-                }
-                // we create a new stage object to store the concerts
-                $new_stage = new Stage();
-                $new_stage->setId($s->getId())
-                    ->setName($s->getName())
-                    ->setConcerts($concerts);
-                $result[] = $new_stage;  
+                } 
             }
             // we want to get the name of the genre
-            $genre_repo = $this
+            $repo_genre = $this
                 ->getDoctrine()
                 ->getManager()
                 ->getRepository('FRHollenBundle:Genre');
-            $genre_name = $genre_repo->findById($genre);
+            $genre_name = $genre_repo->findById($genre_id);
         }
         
         // we want the global begin and end times so the running order fit the concerts correctly
         $global_begin = PHP_INT_MAX;
         $global_end = 0;
-        foreach( $result as &$s ){
-            foreach( $s->getConcerts() as &$c ){
+        foreach( $concerts_stage as &$s ){
+            foreach( $s as &$c ){
                 if( $global_begin > $c->beginint() ){
                     $global_begin = $c->beginint();
                 }
@@ -127,7 +107,7 @@ class DefaultController extends Controller
         
         return $this->render('FRHollenBundle:Default:planning.html.twig', array(
             'runningOrder' => $runningOrder,
-            'stages' => $result,
+            'stages' => $concerts_stage,
             'begin' => $global_begin,
             'end' => $global_end,
             'genre' => $genre_name

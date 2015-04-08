@@ -8,13 +8,13 @@ fr_hollen_edit_user:
     defaults: { _controller: FRHollenBundle:Default:editUser }
 
 fr_hollen_planning:
-    path: /planning/{stage}/{begin}.{end}/{genre}
-    defaults: { _controller: FRHollenBundle:Default:planning, stage: ALL, begin: NO_BEGIN, end: NO_END, genre: ANY }
+    path: /planning/stage/{stage_id}/begin/{begin_int}/end/{end_int}/genre/{genre_id}
+    defaults: { _controller: FRHollenBundle:Default:planning, stage_id: ALL, begin_int: NO_BEGIN, end_int: NO_END, genre_id: ANY }
     requirements:
-        stage: (\d+)|(ALL)
-        begin: (\d+)|(NO_BEGIN)
-        end:   (\d+)|(NO_END)
-        genre: (\d+)|(ANY)
+        stage_id:  (\d+)|(ALL)
+        begin_int: (\d+)|(NO_BEGIN)
+        end_int:   (\d+)|(NO_END)
+        genre_id:  (\d+)|(ANY)
 
 # Users
 fr_hollen_list_users:
