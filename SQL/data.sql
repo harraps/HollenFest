@@ -1,6 +1,6 @@
 SET FOREIGN_KEY_CHECKS=0;
 
-INSERT INTO fr_stage (name) value ("MainStageHolen"),("MainStageFolter"),("Altar"),("Temple"),("Warzone");
+INSERT INTO fr_stage (name) value ("Holen"),("Folter"),("Altar"),("Temple"),("Warzone");
 
 SELECT * FROM fr_stage;
 
