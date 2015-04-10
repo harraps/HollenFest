@@ -125,9 +125,8 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getmanager();
         $repo_concert = $em->getRepository('FRHollenBundle:Concert');
-        $repo_order = $em->getRepository('FRHollenBundle:RunningOrder');
         
-        $concert = $repo_concert->findById($id);
+        $concert = $repo_concert->findOneById($id);
         $user = $this->getUser();
         
         if( $concert == null ){
@@ -146,9 +145,8 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getmanager();
         $repo_concert = $em->getRepository('FRHollenBundle:Concert');
-        $repo_order = $em->getRepository('FRHollenBundle:RunningOrder');
         
-        $concert = $repo_concert->findById($id);
+        $concert = $repo_concert->findOneById($id);
         $user = $this->getUser();
         
         if( $concert == null ){
