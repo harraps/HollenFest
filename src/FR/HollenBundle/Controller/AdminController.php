@@ -343,7 +343,7 @@ class AdminController extends Controller
                 
                 // if the concert overlap with other concerts on the same stage, we remove them
                 foreach( $concerts_stage as &$c ){
-                    if( $concert->checkSpace($c) ){
+                    if( !$concert->checkSpace($c) ){
                         $em->remove($c);
                         $em->flush();
                     }
@@ -351,7 +351,7 @@ class AdminController extends Controller
                 
                 // if the concert overlap with other concerts with the same group, we remove them
                 foreach( $concerts_band as &$c ){
-                    if( $concert->checkSpace($c) ){
+                    if( !$concert->checkSpace($c) ){
                         $em->remove($c);
                         $em->flush();
                     }
