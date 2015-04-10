@@ -16,6 +16,18 @@ fr_hollen_planning:
         end_int:   (\d+)|(NO_END)
         genre_id:  (\d+)|(ANY)
 
+fr_hollen_add_order:
+    path: /order/add/{id}
+    defaults: { _controller: FRHollenBundle:Default:addOrder }
+    requirements:
+        id: \d+
+
+fr_hollen_remove_order:
+    path: /order/remove/{id}
+    defaults: { _controller: FRHollenBundle:Default:removeOrder }
+    requirements:
+        id: \d+
+
 # Users
 fr_hollen_list_users:
     path: /user/list

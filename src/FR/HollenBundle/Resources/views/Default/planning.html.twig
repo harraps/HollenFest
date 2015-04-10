@@ -1,52 +1,55 @@
 {% extends "FRHollenBundle::layout.html.twig" %}
 
 {% block content %}
-<!--div class="row">
-    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
-        <svg id="Test" height="100%" width="100%" viewBox="0 0 100 1000">
-            <g>
-                <rect x="5"  y="100" height="100" width="90" ry="10" style="fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)" />
-                <text x="50" y="120" text-anchor="middle" style="font-size:10px;" fill="white">Nom du groupe</text>
-                <text x="50" y="130" text-anchor="middle" style="font-size:10px;" fill="gray">12H30</text>
-                <text x="50" y="140" text-anchor="middle" style="font-size:10px;" fill="gray">13H00</text>
-            </g>
-        </svg>
-    </div>
-</div>
-<script>
-    var test = Snap("#Test");
-    hollen.addLines( test );
-</script-->
+<style>
+    .concert{
+        position: absolute;
+        width: 100%;
+    }
+    .panel-heading,
+    .panel-body{
+        padding-top: 2px;
+        padding-bottom: 2px;
+    }
+</style>
+
 <div class="row">
-    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
-        <svg id="runningOrder" height="100%" width="100%" viewBox="0 0 100 1000">
-        </svg>
+    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6" style="height:{{ (end - begin)*2 + 30 }}px">
+        <strong>Running Order</strong>
+        {% for concert in orders %}
+            <div class="panel panel-default concert" style="top:{{ (concert.beginint - begin)*2 + 30 }}px;height:{{ (concert.endint - concert.beginint)*2 }}px">
+                <div class="panel-heading">
+                    {{ concert.rockband.name }}
+                    <a href="{{ path('fr_hollen_remove_order',{ 'id':concert.id }) }}" class="btn btn-danger btn-xs pull-right">
+                        <span class="glyphicon glyphicon-remove"></span> Enlever
+                    </a>
+                </div>
+                <div class="panel-body">
+                    {{ concert.beginTime.format("H:i - d/m/Y") }} <br/>
+                    {{ concert.endTime.format("H:i - d/m/Y") }}
+                </div>
+            </div>
+        {% endfor %}
     </div>
     {% for name,stage in stages %}
-    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
-        <strong class="text-center">{{ name }}</strong>
-        <svg id="stage-{{ loop.index0 }}" height="100%" width="100%" viewBox="0 0 100 {{ end - begin }}">
-            <g id="linegroup-{{ loop.index0 }}">
-            </g>
-            <g id="concerts-{{ loop.index0 }}">
-                {% for concert in stage %}
-                <g>
-                    <rect x="5" y="{{ concert.beginint - begin }}" width="90" height="{{ concert.endint - concert.beginint }}" ry="10" style="fill:#0f0f0f;stroke-width:3;stroke:rgb(0,0,0)" />
-                    <text x="50" y="{{ concert.beginint - begin + 20 }}" text-anchor="middle" style="font-size:10px;" fill="white">{{ concert.rockband.name }}</text>
-                    <text x="50" y="{{ concert.beginint - begin + 30 }}" text-anchor="middle" style="font-size:10px;" fill="gray">{{ concert.beginTime.format("H:i - d/m/Y") }}</text>
-                    <text x="50" y="{{ concert.beginint - begin + 40 }}" text-anchor="middle" style="font-size:10px;" fill="gray">{{ concert.endTime.format("H:i - d/m/Y") }}</text>
-                </g>
-                {% endfor %}
-            </g>
-        </svg>
+    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6" style="height:{{ (end - begin)*2 + 30 }}px">
+        <strong>{{ name }}</strong>
+        {% for concert in stage %}
+            <div class="panel panel-default concert" style="top:{{ (concert.beginint - begin)*2 + 30 }}px;height:{{ (concert.endint - concert.beginint)*2 }}px">
+                <div class="panel-heading">
+                    {{ concert.rockband.name }}
+                    <a href="{{ path('fr_hollen_add_order',{ 'id':concert.id }) }}" class="btn btn-success btn-xs pull-right">
+                        <span class="glyphicon glyphicon-plus"></span> Ajouter
+                    </a>
+                </div>
+                <div class="panel-body">
+                    {{ concert.beginTime.format("H:i - d/m/Y") }} <br/>
+                    {{ concert.endTime.format("H:i - d/m/Y") }}
+                </div>
+            </div>
+        {% endfor %}
     </div>
     {% endfor %}
 </div>
-
-<script>
-    $( document ).ready(function() {
-        hollen.init( {{ stages|length }} );
-    });
-</script>
 
 {% endblock %}

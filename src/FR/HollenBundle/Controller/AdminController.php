@@ -8,6 +8,7 @@ use FR\HollenBundle\Entity\Genre;
 use FR\HollenBundle\Entity\Rockband;
 use FR\HollenBundle\Entity\Stage;
 use FR\HollenBundle\Entity\Concert;
+use FR\HollenBundle\Entity\User;
 
 class AdminController extends Controller
 {

@@ -3,6 +3,12 @@
 namespace FR\HollenBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use FR\HollenBundle\Entity\Genre;
+use FR\HollenBundle\Entity\Rockband;
+use FR\HollenBundle\Entity\Stage;
+use FR\HollenBundle\Entity\Concert;
+use FR\HollenBundle\Entity\User;
+
 
 class DefaultController extends Controller
 {
@@ -18,29 +24,33 @@ class DefaultController extends Controller
     
     public function planningAction($stage_id, $begin_int, $end_int, $genre_id)
     {
+        $em = $this->getDoctrine()->getEntityManager();
+        $runningOrder = $this->getUser()->getConcerts();
+        
         // we send the running order of the user so he could edit it
-        $runningOrder = $this->getUser()->getRunningOrder();
-        
-        $repo_stages = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository('FRHollenBundle:Stage');
-        
-        $repo_concerts = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository('FRHollenBundle:Concert');
+        $repo_stages = $em->getRepository('FRHollenBundle:Stage');
+        $repo_concerts = $em->getRepository('FRHollenBundle:Concert');
         
         // we search for the stages asked by the user
         $concerts_stage = [];
         if( $stage_id == "ALL" ){ // we want all the stages
             $stages = $repo_stages->findAll();
             foreach( $stages as &$stage ){
-                $concerts_stage[$stage->getName()] = $repo_concerts->findByStage($stage);
+                $concerts_stage[$stage->getName()] = $repo_concerts->findBy(
+                    array( 'stage' => $stage ),
+                    array( 'beginTime' => "asc" ),
+                    null,
+                    null
+                );
             }
         }else{ // we only want the given stage
             $stage = $repo_stages->findById($stage_id);
-            $concerts_stage[$stage->getName()] = $repo_concerts->findByStage($stage);
+            $concerts_stage[$stage->getName()] = $repo_concerts->findBy(
+                array( 'stage' => $stage ),
+                array( 'beginTime' => "asc" ),
+                null,
+                null
+            );
         }
         
         // we search for all the concerts starting after the begin time
@@ -84,10 +94,7 @@ class DefaultController extends Controller
                 } 
             }
             // we want to get the name of the genre
-            $repo_genre = $this
-                ->getDoctrine()
-                ->getManager()
-                ->getRepository('FRHollenBundle:Genre');
+            $repo_genre = $em->getRepository('FRHollenBundle:Genre');
             $genre_name = $genre_repo->findById($genre_id);
         }
         
@@ -106,12 +113,54 @@ class DefaultController extends Controller
         }
         
         return $this->render('FRHollenBundle:Default:planning.html.twig', array(
-            'runningOrder' => $runningOrder,
+            'orders' => $runningOrder,
             'stages' => $concerts_stage,
             'begin' => $global_begin,
             'end' => $global_end,
             'genre' => $genre_name
         ));
+    }
+    
+    public function addOrderAction($id)
+    {
+        $em = $this->getDoctrine()->getmanager();
+        $repo_concert = $em->getRepository('FRHollenBundle:Concert');
+        $repo_order = $em->getRepository('FRHollenBundle:RunningOrder');
+        
+        $concert = $repo_concert->findById($id);
+        $user = $this->getUser();
+        
+        if( $concert == null ){
+            return $this->render('FRHollenBundle:Default:index.html.twig');
+        }
+        
+        $user->addConcert($concert);
+        
+        $this->get('fos_user.user_manager')->updateUser($user);
+        $em->flush();
+        
+        return $this->PlanningAction("ALL","NO_BEGIN","NO_END","ANY");
+    }
+    
+    public function removeOrderAction($id)
+    {
+        $em = $this->getDoctrine()->getmanager();
+        $repo_concert = $em->getRepository('FRHollenBundle:Concert');
+        $repo_order = $em->getRepository('FRHollenBundle:RunningOrder');
+        
+        $concert = $repo_concert->findById($id);
+        $user = $this->getUser();
+        
+        if( $concert == null ){
+            return $this->render('FRHollenBundle:Default:index.html.twig');
+        }
+        
+        $user->removeConcert($concert);
+        
+        $this->get('fos_user.user_manager')->updateUser($user);
+        $em->flush();
+        
+        return $this->PlanningAction("ALL","NO_BEGIN","NO_END","ANY");
     }
     
     public function otherAction()

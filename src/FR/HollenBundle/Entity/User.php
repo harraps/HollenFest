@@ -26,33 +26,45 @@ class User extends BaseUser
      * @Expose
      */
     protected $id;
-
+    
     /**
-     * @var RunningOrder
-     * @ORM\OneToOne(targetEntity="RunningOrder", cascade={"remove", "persist"})
+     * @var array
+     *
+     * @ORM\ManyToMany(targetEntity="Concert", inversedBy="concerts", cascade={"remove","persist"})
+     * @ORM\JoinTable(name="fr_users_concerts")
      * @Expose
      */
-    protected $runningOrder;
-
-    /**
-     * Set runningOrder
-     *
-     * @param \stdClass $runningOrder
-     * @return User
-     */
-    public function setRunningOrder($runningOrder)
+    protected $concerts = array();
+    
+    public function setConcerts(array $concerts)
     {
-        $this->runningOrder = $runningOrder;
+        $this->concerts = $concerts;
         return $this;
     }
-
-    /**
-     * Get runningOrder
-     *
-     * @return \stdClass 
-     */
-    public function getRunningOrder()
+    
+    public function getConcerts()
     {
-        return $this->runningOrder;
+        return $this->concerts;
+    }
+    
+    public function addConcert(Concert $concert)
+    {
+        foreach( $this->concerts as $key => &$c ){
+            if( !$concert->checkSpaceNoMargin($c) ){
+                unset($this->concerts[$key]);
+            }
+        }
+        $this->concerts[] = $concert;
+        return $this;
+    }
+    
+    public function removeConcert(Concert $concert)
+    {
+        foreach( $this->concerts as $key => &$c ){
+            if( !$concert->checkSpaceNoMargin($c) ){
+                unset($this->concerts[$key]);
+            }
+        }
+        return $this;
     }
 }

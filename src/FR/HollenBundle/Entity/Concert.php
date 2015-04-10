@@ -270,4 +270,20 @@ class Concert
         return false;
     }
     
+    public function checkSpaceNoMargin(Concert $concert)
+    {
+        if(
+            (
+                $this->beginint() < $concert->beginint() &&
+                $this->endint()   < $concert->beginint()
+            )||(
+                $this->beginint() > $concert->endint() &&
+                $this->endint()   > $concert->endint()
+            )
+        ){
+            return true;
+        }
+        return false;
+    }
+    
 }
