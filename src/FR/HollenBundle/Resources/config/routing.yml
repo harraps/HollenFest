@@ -123,3 +123,7 @@ fr_hollen_remove_concert:
 fr_hollen_other:
     path: /spaghetti
     defaults: { _controller: FRHollenBundle:Default:other }
+
+fr_hollen_html2pdf:
+    path: /html2pdf
+    defaults: { _controller: FRHollenBundle:Default:html2pdf }

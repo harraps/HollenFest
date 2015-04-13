@@ -14,32 +14,60 @@
 </style>
 
 <div class="row">
-    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6" style="height:{{ (end - begin)*2 + 30 }}px">
-        <strong>Running Order</strong>
-        {% for concert in orders %}
-            <div class="panel panel-default concert" style="top:{{ (concert.beginint - begin)*2 + 30 }}px;height:{{ (concert.endint - concert.beginint)*2 }}px">
+    
+        
+        <center>
+        <div class="btn-group">
+            <a href="{{ path('fr_hollen_planning',{'begin_int': 23911080, 'end_int': 23912700}) }}" class="btn btn-default"> Day 1</a>
+            <a href="{{ path('fr_hollen_planning',{'begin_int': 23912700, 'end_int': 23914140}) }}" class="btn btn-default"> Day 2</a>
+            <a href="{{ path('fr_hollen_planning',{'begin_int': 23914140, 'end_int': 23915580}) }}" class="btn btn-default"> Day 3</a>
+            <a href="{{ path('fr_hollen_planning') }}" class="btn btn-default"> All Days</a>
+            <a href="{{ path('fr_hollen_html2pdf') }}" class="btn btn-default">
+             Exporter to PDF
+        </a>
+            </div>
+        </center>
+ 
+
+
+</div>
+
+<div class="row">
+
+    <page>
+        
+        <page_header> 
+        </page_header>
+        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6" style="height:{{ (end - begin)*3 + 30 }}px">
+            <strong>Running Order</strong>
+            {% for concert in orders %}
+            <div class="panel panel-default concert" style="top:{{ (concert.beginint - begin)*4 + 30 }}px;height:{{ (concert.endint - concert.beginint)*4 }}px">
                 <div class="panel-heading">
                     {{ concert.rockband.name }}
                     <a href="{{ path('fr_hollen_remove_order',{ 'id':concert.id }) }}" class="btn btn-danger btn-xs pull-right">
-                        <span class="glyphicon glyphicon-remove"></span> Enlever
+                        <span class="glyphicon glyphicon-remove"></span>
                     </a>
                 </div>
                 <div class="panel-body">
+                    Stage : {{ concert.stage.name }}<br/>
                     {{ concert.beginTime.format("H:i - d/m/Y") }} <br/>
                     {{ concert.endTime.format("H:i - d/m/Y") }}
                 </div>
             </div>
-        {% endfor %}
-    </div>
-    {% for name,stage in stages %}
-    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6" style="height:{{ (end - begin)*2 + 30 }}px">
-        <strong>{{ name }}</strong>
-        {% for concert in stage %}
-            <div class="panel panel-default concert" style="top:{{ (concert.beginint - begin)*2 + 30 }}px;height:{{ (concert.endint - concert.beginint)*2 }}px">
+            {% endfor %}
+        </div>
+        {#<a href="{{ path('fr_hollen_html2pdf') }}" class="btn btn-success btn-xs pull-right">
+            <span class="glyphicon glyphicon-plus"></span> Exporter to PDF
+        </a>#}
+        {% for name,stage in stages %}
+        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6" style="height:{{ (end - begin)*4 + 30 }}px">
+            <center><h4>{{ name }}</h4></center>
+            {% for concert in stage %}
+            <div class="panel panel-default concert" style="top:{{ (concert.beginint - begin)*4 + 30 }}px;height:{{ (concert.endint - concert.beginint)*4 }}px">
                 <div class="panel-heading">
                     {{ concert.rockband.name }}
                     <a href="{{ path('fr_hollen_add_order',{ 'id':concert.id }) }}" class="btn btn-success btn-xs pull-right">
-                        <span class="glyphicon glyphicon-plus"></span> Ajouter
+                        <span class="glyphicon glyphicon-plus"></span>
                     </a>
                 </div>
                 <div class="panel-body">
@@ -47,9 +75,13 @@
                     {{ concert.endTime.format("H:i - d/m/Y") }}
                 </div>
             </div>
+            {% endfor %}
+        </div>
         {% endfor %}
-    </div>
-    {% endfor %}
+        <page_footer>
+        </page_footer>
+    </page>
+
 </div>
 
 {% endblock %}
