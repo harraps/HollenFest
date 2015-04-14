@@ -31,12 +31,17 @@ class DefaultController extends Controller
         // we send the running order of the user so he could edit it
         $repo_stages = $em->getRepository('FRHollenBundle:Stage');
         $repo_concerts = $em->getRepository('FRHollenBundle:Concert');
+        $repo_genre = $em->getRepository('FRHollenBundle:Genre');
+        
+        $genre_list = $repo_genre->findAll();
         
         // we search for the stages asked by the user
         $concerts_stage = [];
+        $stages_array = [];
         if( $stage_id == "ALL" ){ // we want all the stages
             $stages = $repo_stages->findAll();
             foreach( $stages as &$stage ){
+                $stages_array[$stage->getName()] = $stage->getId();
                 $concerts_stage[$stage->getName()] = $repo_concerts->findBy(
                     array( 'stage' => $stage ),
                     array( 'beginTime' => "asc" ),
@@ -45,7 +50,9 @@ class DefaultController extends Controller
                 );
             }
         }else{ // we only want the given stage
-            $stage = $repo_stages->findById($stage_id);
+            $stage_id = (int) $stage_id;
+            $stage = $repo_stages->find($stage_id);
+            $stages_array[$stage->getName()] = $stage->getId();
             $concerts_stage[$stage->getName()] = $repo_concerts->findBy(
                 array( 'stage' => $stage ),
                 array( 'beginTime' => "asc" ),
@@ -95,7 +102,6 @@ class DefaultController extends Controller
                 } 
             }
             // we want to get the name of the genre
-            $repo_genre = $em->getRepository('FRHollenBundle:Genre');
             $genre_name = $genre_repo->findById($genre_id);
         }
         
@@ -115,10 +121,12 @@ class DefaultController extends Controller
         
         return $this->render('FRHollenBundle:Default:planning.html.twig', array(
             'orders' => $runningOrder,
-            'stages' => $concerts_stage,
+            'concerts' => $concerts_stage,
+            'stages' => $stages_array,
             'begin' => $global_begin,
             'end' => $global_end,
-            'genre' => $genre_name
+            'genre' => $genre_name,
+            'genre_list' => $genre_list
         ));
     }
     
